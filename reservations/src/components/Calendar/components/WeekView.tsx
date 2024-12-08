@@ -63,50 +63,66 @@ export const WeekView = () => {
   });
 
   return (
-    <div className="flex justify-between">
-      {days.map(({ dayString, date }, dayIndex) => (
-        <div
-          key={dayString}
-          className="flex flex-col flex-1 border-r-2 border-blue-500 last:border-r-0"
-        >
-          <TruncatedText
-            className="px-1 border-b-2 border-blue-500"
-            key={dayIndex}
+    <div className="flex">
+      <div className="flex flex-col w-12">
+        {Array.from({ length: 25 }, (_, hour) => (
+          <div key={hour} className="flex items-center h-10">
+            {hour !== 0 && (
+              <small className={`text-right`}>{`${hour - 1 < 10 ? "0" : ""}${
+                hour - 1
+              }:00`}</small>
+            )}
+          </div>
+        ))}
+      </div>
+      <div className="flex flex-1">
+        {days.map(({ dayString, date }, dayIndex) => (
+          <div
+            key={dayString}
+            className="flex flex-col border-l-2 border-blue-500 w-full"
           >
-            {dayString}
-          </TruncatedText>
-          {Array.from({ length: 24 }, (_, hour) => {
-            const reservationsInHour = reservations.filter((reservation) =>
-              reservation.date.isSame(date.hour(hour), "hour")
-            );
-            const reservationCount = reservationsInHour.length;
-            const hasReservation = reservationCount > 0;
-            const hasMultipleReservations = reservationCount >= 2;
-            const hasManyReservations = reservationCount >= 5;
-            return (
-              <div
-                key={hour}
-                className={`flex items-center h-10 px-2 ${
-                  hasReservation ? "bg-yellow-200" : ""
-                } ${hasMultipleReservations ? "bg-red-200" : ""} ${
-                  hasManyReservations ? "bg-blue-200" : ""
-                } border-b-2 border-blue-500 last:border-b-0 hover:bg-blue-100 hover:bg-opacity-80`}
-              >
-                <small className={`text-right`}>{`${
-                  hour < 10 ? "0" : ""
-                }${hour}:00`}</small>
-                {hasMultipleReservations && (
+            <div className="flex items-center justify-center h-10 px-2 border-b-2 border-blue-500">
+              <TruncatedText className="px-2" key={dayIndex}>
+                {dayString}
+              </TruncatedText>
+            </div>
+            {Array.from({ length: 25 }, (_, hour) => {
+              if (hour === 0) {
+                return null;
+              }
+
+              const reservationsInHour = reservations.filter((reservation) =>
+                reservation.date.isSame(date.hour(hour - 1), "hour")
+              );
+              const reservationCount = reservationsInHour.length;
+              const hasReservation = reservationCount > 0;
+              const hasMultipleReservations = reservationCount >= 2;
+              const hasManyReservations = reservationCount >= 5;
+
+              return (
+                <div
+                  key={hour}
+                  className={`flex items-center h-10 px-2 ${
+                    hasReservation ? "bg-yellow-200" : ""
+                  } ${hasMultipleReservations ? "bg-red-200" : ""} ${
+                    hasManyReservations ? "bg-blue-200" : ""
+                  } border-b-2 border-blue-500 last:border-b-0 hover:bg-blue-100 hover:bg-opacity-80`}
+                >
                   <span className=" flex-1 ml-2 text-sm text-gray-700 truncate">
                     {hasManyReservations
                       ? `5+ reservations`
-                      : `2+ reservations`}
+                      : hasMultipleReservations
+                      ? `2+ reservations`
+                      : hasReservation
+                      ? "1 reservation"
+                      : "Free"}
                   </span>
-                )}
-              </div>
-            );
-          })}
-        </div>
-      ))}
+                </div>
+              );
+            })}
+          </div>
+        ))}
+      </div>
     </div>
   );
 };
