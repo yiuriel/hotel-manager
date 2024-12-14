@@ -1,6 +1,6 @@
 # File: nextjs/Dockerfile
-FROM node:18-alpine AS base
-WORKDIR /usr/src/app
+FROM node:20 AS base
+WORKDIR /frontend
 COPY ./package*.json ./
 RUN npm install
 

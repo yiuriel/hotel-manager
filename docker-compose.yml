@@ -4,10 +4,12 @@ services:
   postgres:
     image: postgres:15
     container_name: postgres_db
+    env_file:
+      - .env
     environment:
-      POSTGRES_USER: hotel_admin
-      POSTGRES_PASSWORD: hotel_password
-      POSTGRES_DB: hotel_management
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DB}
     volumes:
       - postgres_data:/var/lib/postgresql/data
     ports:
@@ -17,27 +19,38 @@ services:
     build:
       context: ./backend
       dockerfile: Dockerfile
-      target: ${NODE_ENV:-prod} # Use "dev" or "prod" based on the mode
+      target: ${NODE_ENV:-dev} # Use "dev" or "dev" based on the mode
     container_name: backend
+    env_file:
+      - .env
     environment:
-      DATABASE_URL: postgres://hotel_admin:hotel_password@postgres:5432/hotel_management
+      DATABASE_URL: ${DATABASE_URL}
     depends_on:
       - postgres
     ports:
-      - "3001:3000"
+      - "3001:${BACKEND_PORT}"
+    volumes:
+      - ./backend:/backend
+      - /backend/node_modules
 
   frontend:
     build:
       context: ./frontend
       dockerfile: Dockerfile
-      target: ${NODE_ENV:-prod} # Use "dev" or "prod" based on the mode
+      target: ${NODE_ENV:-dev} # Use "dev" or "dev" based on the mode
     container_name: frontend
+    env_file:
+      - .env
     environment:
-      API_URL: http://nestjs:3000
+      API_URL: http://backend:${BACKEND_PORT}
+      NEXT_PUBLIC_API_URL: http://localhost:3001
     depends_on:
       - backend
     ports:
-      - "3000:3000"
+      - "3000:${FRONTEND_PORT}"
+    volumes:
+      - ./frontend:/frontend
+      - /frontend/node_modules
 
 volumes:
   postgres_data:
