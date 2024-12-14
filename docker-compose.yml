@@ -1,0 +1,44 @@
+version: '3.9'
+
+services:
+  postgres:
+    image: postgres:15
+    container_name: postgres_db
+    environment:
+      POSTGRES_USER: hotel_admin
+      POSTGRES_PASSWORD: hotel_password
+      POSTGRES_DB: hotel_management
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+      target: ${NODE_ENV:-prod} # Use "dev" or "prod" based on the mode
+    container_name: backend
+    environment:
+      DATABASE_URL: postgres://hotel_admin:hotel_password@postgres:5432/hotel_management
+    depends_on:
+      - postgres
+    ports:
+      - "3001:3000"
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+      target: ${NODE_ENV:-prod} # Use "dev" or "prod" based on the mode
+    container_name: frontend
+    environment:
+      API_URL: http://nestjs:3000
+    depends_on:
+      - backend
+    ports:
+      - "3000:3000"
+
+volumes:
+  postgres_data:
+    driver: local
