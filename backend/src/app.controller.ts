@@ -6,7 +6,8 @@ export class AppController {
   constructor(private readonly appService: AppService) {}
 
   @Get()
-  getHello(): object {
-    return this.appService.getHello();
+  getPing(): object {
+    const startTime = Date.now();
+    return this.appService.ping(startTime);
   }
 }
