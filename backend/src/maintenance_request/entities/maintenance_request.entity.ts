@@ -1,12 +1,12 @@
 import { Room } from 'src/room/entities/room.entity';
-import { Staff } from 'src/staff/entities/staff.entity';
+import { User } from 'src/user/entities/user.entity';
 import {
-  Entity,
-  PrimaryGeneratedColumn,
-  ManyToOne,
-  JoinColumn,
   Column,
   CreateDateColumn,
+  Entity,
+  JoinColumn,
+  ManyToOne,
+  PrimaryGeneratedColumn,
 } from 'typeorm';
 
 @Entity()
@@ -20,9 +20,11 @@ export class MaintenanceRequest {
   @JoinColumn()
   room: Room; // Room requiring maintenance
 
-  @ManyToOne(() => Staff, (staff) => staff.staffId)
+  @ManyToOne(() => User, (user) => user.maintenanceRequests, {
+    onDelete: 'CASCADE',
+  })
   @JoinColumn()
-  staff: Staff; // Staff member handling the request
+  user: User; // Staff member handling the request
 
   @Column('text')
   description: string; // Description of the issue

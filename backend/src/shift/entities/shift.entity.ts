@@ -1,10 +1,10 @@
-import { Staff } from 'src/staff/entities/staff.entity';
+import { User } from 'src/user/entities/user.entity';
 import {
-  Entity,
-  PrimaryGeneratedColumn,
-  ManyToOne,
-  JoinColumn,
   Column,
+  Entity,
+  JoinColumn,
+  ManyToOne,
+  PrimaryGeneratedColumn,
 } from 'typeorm';
 
 @Entity()
@@ -12,9 +12,9 @@ export class Shift {
   @PrimaryGeneratedColumn('uuid')
   shiftId: string; // Unique identifier for each shift
 
-  @ManyToOne(() => Staff, (staff) => staff.shifts, { onDelete: 'CASCADE' })
+  @ManyToOne(() => User, (user) => user.shifts, { onDelete: 'CASCADE' })
   @JoinColumn()
-  staff: Staff; // Staff member assigned to the shift
+  user: User; // Staff member assigned to the shift
 
   @Column('timestamp')
   startTime: Date; // Start time of the shift

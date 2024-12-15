@@ -1,12 +1,14 @@
 import { Activity } from 'src/activity/entities/activity.entity';
+import { Organization } from 'src/organization/entities/organization.entity';
 import { Room } from 'src/room/entities/room.entity';
-import { Staff } from 'src/staff/entities/staff.entity';
+import { User } from 'src/user/entities/user.entity';
 import {
-  Entity,
-  PrimaryGeneratedColumn,
   Column,
   CreateDateColumn,
+  Entity,
+  ManyToOne,
   OneToMany,
+  PrimaryGeneratedColumn,
 } from 'typeorm';
 
 @Entity()
@@ -44,11 +46,16 @@ export class Hotel {
   @OneToMany(() => Room, (room) => room.hotel)
   rooms: Room[]; // List of rooms in the hotel
 
-  @OneToMany(() => Staff, (staff) => staff.hotel)
-  staff: Staff[]; // Staff associated with the hotel
+  @OneToMany(() => User, (user) => user.hotel)
+  users: User[]; // Staff associated with the hotel
 
   @OneToMany(() => Activity, (activity) => activity.hotel)
   activities: Activity[]; // Events hosted by the hotel
+
+  @ManyToOne(() => Organization, (organization) => organization.hotels, {
+    nullable: true,
+  })
+  organization: Organization;
 
   @Column('text', { nullable: true })
   threeDSchema: string; // JSON or binary representation of the 3D schema
