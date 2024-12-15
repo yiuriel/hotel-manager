@@ -16,6 +16,11 @@ import { RoleModule } from './role/role.module';
 import { RoomModule } from './room/room.module';
 import { ShiftModule } from './shift/shift.module';
 import { UserModule } from './user/user.module';
+import { AuthModule } from './auth/auth.module';
+import { SeedService } from './seed/seed.service';
+import { SeedModule } from './seed/seed.module';
+import { UserService } from './user/user.service';
+import { RoleService } from './role/role.service';
 
 @Module({
   imports: [
@@ -27,6 +32,7 @@ import { UserModule } from './user/user.module';
       useFactory: (configService: ConfigService) => ({
         type: 'postgres',
         url: configService.get<string>('DATABASE_URL'),
+        dropSchema: true,
         autoLoadEntities: true,
         synchronize: true,
       }),
@@ -45,8 +51,10 @@ import { UserModule } from './user/user.module';
     OrganizationModule,
     UserModule,
     RoleModule,
+    AuthModule,
+    SeedModule,
   ],
   controllers: [AppController],
-  providers: [AppService],
+  providers: [AppService, UserService, RoleService, SeedService],
 })
 export class AppModule {}
