@@ -22,12 +22,24 @@ export class AuthService {
 
   async login(user: any) {
     const payload = { email: user.email, sub: user.id, role: user.role };
-    return {
-      access_token: this.jwtService.sign(payload, {
+    return this.jwtService.sign(payload, {
+      secret: jwtConstants.secret,
+      expiresIn: jwtConstants.expiresIn,
+    });
+  }
+
+  async verifyToken(token: string) {
+    try {
+      const payload = this.jwtService.verify(token, {
         secret: jwtConstants.secret,
-        expiresIn: jwtConstants.expiresIn,
-      }),
-    };
+      });
+      if (!payload) {
+        throw new UnauthorizedException('Invalid token');
+      }
+      return { message: 'Token is valid' };
+    } catch (error) {
+      throw new UnauthorizedException('Invalid token');
+    }
   }
 
   async register(email: string, password: string) {

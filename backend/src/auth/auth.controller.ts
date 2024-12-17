@@ -5,21 +5,43 @@ import {
   UseGuards,
   Request,
   UnauthorizedException,
+  Get,
+  Res,
 } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { JwtAuthGuard } from './jwt-auth.guard';
+import { Response } from 'express';
 
 @Controller('auth')
 export class AuthController {
   constructor(private readonly authService: AuthService) {}
 
   @Post('login')
-  async login(@Body() body: { email: string; password: string }) {
+  async login(
+    @Body() body: { email: string; password: string },
+    @Res() res: Response,
+  ) {
     const user = await this.authService.validateUser(body.email, body.password);
     if (!user) {
       throw new UnauthorizedException('Invalid email or password');
     }
-    return this.authService.login(user);
+    const token = await this.authService.login(user);
+
+    res.cookie('token', token, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === 'production', // Use secure flag in production
+      sameSite: 'strict',
+      maxAge: 3600000,
+    });
+
+    return res.json({ message: 'Login successful' });
+  }
+
+  @Post('verify')
+  async verifyToken(@Request() req: any) {
+    const token = req.headers.cookie?.split(';')?.[0]?.split('=')?.[1];
+
+    return this.authService.verifyToken(token);
   }
 
   @Post('register')
@@ -28,8 +50,10 @@ export class AuthController {
   }
 
   @UseGuards(JwtAuthGuard)
-  @Post('protected')
-  async protectedRoute(@Request() req: any) {
-    return { message: 'You have access!', user: req.user };
+  @Get('profile')
+  getProfile(@Request() req: any) {
+    console.log(req.user);
+
+    return req.user;
   }
 }

@@ -47,7 +47,7 @@ services:
     depends_on:
       - backend
     ports:
-      - "3000:${FRONTEND_PORT}"
+      - "${FRONTEND_PORT}:${FRONTEND_PORT}"
     volumes:
       - ./frontend:/frontend
       - /frontend/node_modules
