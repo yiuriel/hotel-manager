@@ -3,6 +3,7 @@ import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 export const authApi = createApi({
   reducerPath: "authApi",
   baseQuery: fetchBaseQuery({ baseUrl: "http://localhost:3001/auth" }),
+  tagTypes: ["Verify"],
   endpoints: (builder) => ({
     login: builder.mutation({
       query: (credentials) => ({
@@ -11,6 +12,7 @@ export const authApi = createApi({
         body: credentials,
         credentials: "include",
       }),
+      invalidatesTags: ["Verify"],
     }),
     verify: builder.query({
       query: () => ({
@@ -18,15 +20,22 @@ export const authApi = createApi({
         method: "POST",
         credentials: "include",
       }),
+      providesTags: ["Verify"],
     }),
     logout: builder.mutation({
       query: () => ({
         url: "logout",
         method: "POST",
+        credentials: "include",
       }),
+      invalidatesTags: ["Verify"],
     }),
   }),
 });
 
-export const { useLoginMutation, useLazyVerifyQuery, useLogoutMutation } =
-  authApi;
+export const {
+  useLoginMutation,
+  useVerifyQuery,
+  useLazyVerifyQuery,
+  useLogoutMutation,
+} = authApi;

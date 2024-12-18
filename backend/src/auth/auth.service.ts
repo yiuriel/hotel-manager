@@ -1,8 +1,9 @@
-import { Injectable, UnauthorizedException } from '@nestjs/common';
+import { Injectable, Res, UnauthorizedException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import * as argon2 from 'argon2';
 import { UserService } from '../user/user.service';
 import { jwtConstants } from 'src/config/jwt.config';
+import { Response } from 'express';
 
 @Injectable()
 export class AuthService {
@@ -38,12 +39,19 @@ export class AuthService {
       }
       return { message: 'Token is valid' };
     } catch (error) {
-      throw new UnauthorizedException('Invalid token');
+      throw new UnauthorizedException('Invalid token', error);
     }
   }
 
   async register(email: string, password: string) {
     const hashedPassword = await argon2.hash(password);
     return this.userService.createUser(email, hashedPassword);
+  }
+
+  logout(@Res({ passthrough: true }) response: Response) {
+    const date = new Date();
+    date.setDate(date.getDate() + 7);
+
+    response.clearCookie('access_token');
   }
 }
