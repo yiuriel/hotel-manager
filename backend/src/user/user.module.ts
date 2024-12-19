@@ -1,13 +1,13 @@
 import { Module } from '@nestjs/common';
-import { UserService } from './user.service';
-import { UserController } from './user.controller';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { User } from './entities/user.entity';
-import { Role } from 'src/role/entities/role.entity';
-import { Shift } from 'src/shift/entities/shift.entity';
-import { MaintenanceRequest } from 'src/maintenance_request/entities/maintenance_request.entity';
 import { Hotel } from 'src/hotel/entities/hotel.entity';
+import { MaintenanceRequest } from 'src/maintenance_request/entities/maintenance_request.entity';
 import { Organization } from 'src/organization/entities/organization.entity';
+import { Shift } from 'src/shift/entities/shift.entity';
+import { UserHasRole } from 'src/user_roles/user_has_role.entity';
+import { User } from './entities/user.entity';
+import { UserController } from './user.controller';
+import { UserService } from './user.service';
 
 @Module({
   imports: [
@@ -15,7 +15,7 @@ import { Organization } from 'src/organization/entities/organization.entity';
       User,
       Shift,
       MaintenanceRequest,
-      Role,
+      UserHasRole,
       Hotel,
       Organization,
     ]),

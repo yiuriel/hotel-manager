@@ -1,5 +1,5 @@
 # File: nestjs/Dockerfile
-FROM node:20 AS base
+FROM node:22 AS base
 WORKDIR /backend
 COPY ./package*.json ./
 RUN npm install

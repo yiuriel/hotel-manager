@@ -1,34 +1,18 @@
 import { Link } from "react-router";
-import { ProfileIcon } from "../Icons/ProfileIcon";
-import { useVerifyQuery } from "../../redux/auth/auth.api";
+import { useAppSelector } from "../../redux/hooks";
+import { UserMenu } from "./UserMenu";
 
 export const Nav = () => {
-  const { data: user } = useVerifyQuery(undefined);
+  const isLoggedIn = useAppSelector((state) => state.auth.isLoggedIn);
 
   return (
-    <nav className="flex gap-2 justify-between px-4 py-2">
+    <nav className="flex justify-between p-4 shadow-md">
       <div className="flex gap-2">
-        <Link prefetch="viewport" to="/">
+        <Link prefetch="viewport" to="/app">
           Home
         </Link>
-        {!user && (
-          <Link prefetch="viewport" to="/login">
-            Login
-          </Link>
-        )}
       </div>
-      <div className="flex gap-2">
-        {user && (
-          <>
-            <Link prefetch="viewport" to="/logout">
-              Logout
-            </Link>
-            <Link prefetch="viewport" to="/profile">
-              <ProfileIcon />
-            </Link>
-          </>
-        )}
-      </div>
+      <div className="flex gap-2">{isLoggedIn && <UserMenu />}</div>
     </nav>
   );
 };

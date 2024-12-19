@@ -1,14 +1,15 @@
 import { Module } from '@nestjs/common';
-import { AuthModule } from 'src/auth/auth.module';
-import { AuthService } from 'src/auth/auth.service';
+import { TypeOrmModule } from '@nestjs/typeorm';
 import { UserService } from 'src/user/user.service';
-import { UserModule } from '../user/user.module';
 import { SeedService } from './seed.service';
-import { JwtService } from '@nestjs/jwt';
+import { User } from 'src/user/entities/user.entity';
+import { Organization } from 'src/organization/entities/organization.entity';
+import { Role } from 'src/role/entities/role.entity';
+import { UserHasRole } from 'src/user_roles/user_has_role.entity';
 
 @Module({
-  imports: [UserModule, AuthModule],
-  providers: [SeedService, UserService, AuthService, JwtService],
+  imports: [TypeOrmModule.forFeature([User, Organization, Role, UserHasRole])],
+  providers: [SeedService, UserService],
   exports: [SeedService],
 })
 export class SeedModule {}

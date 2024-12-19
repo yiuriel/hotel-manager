@@ -1,4 +1,5 @@
 import { Hotel } from 'src/hotel/entities/hotel.entity';
+import { Role } from 'src/role/entities/role.entity';
 import { User } from 'src/user/entities/user.entity';
 import {
   Entity,
@@ -21,6 +22,9 @@ export class Organization {
    */
   @ManyToOne(() => User, (user) => user.id, { nullable: false })
   owner: User;
+
+  @OneToMany(() => Role, (role) => role.organization)
+  roles: Role[];
 
   /**
    * List of users associated with the organization.

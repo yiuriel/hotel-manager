@@ -50,9 +50,9 @@ export class AuthController {
 
   @UseGuards(AuthGuard)
   @Get('profile')
-  getProfile(@Request() req: any) {
+  async getProfile(@Request() req: any) {
     console.log(req.user);
 
-    return req.user;
+    return this.authService.getProfile(req.user.id);
   }
 }
