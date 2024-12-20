@@ -7,10 +7,18 @@ import { Organization } from 'src/organization/entities/organization.entity';
 import { Role } from 'src/role/entities/role.entity';
 import { UserHasRole } from 'src/user_roles/user_has_role.entity';
 import { Hotel } from 'src/hotel/entities/hotel.entity';
+import { Shift } from 'src/shift/entities/shift.entity';
 
 @Module({
   imports: [
-    TypeOrmModule.forFeature([User, Organization, Role, UserHasRole, Hotel]),
+    TypeOrmModule.forFeature([
+      User,
+      Organization,
+      Role,
+      UserHasRole,
+      Hotel,
+      Shift,
+    ]),
   ],
   providers: [SeedService, UserService],
   exports: [SeedService],

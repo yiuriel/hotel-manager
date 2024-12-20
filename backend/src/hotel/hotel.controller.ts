@@ -11,4 +11,16 @@ export class HotelController {
   async findAll(@Param('organizationId') organizationId: string) {
     return this.hotelService.findHotelsByOrganizationId(organizationId);
   }
+
+  @UseGuards(AuthGuard)
+  @Get(':hotelId')
+  async findOne(
+    @Param('organizationId') organizationId: string,
+    @Param('hotelId') hotelId: string,
+  ) {
+    return this.hotelService.getHotelWithStaffAndShifts(
+      organizationId,
+      hotelId,
+    );
+  }
 }

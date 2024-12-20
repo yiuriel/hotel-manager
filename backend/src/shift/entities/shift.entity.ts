@@ -1,8 +1,10 @@
+import { Hotel } from 'src/hotel/entities/hotel.entity';
 import { User } from 'src/user/entities/user.entity';
 import {
   Column,
   Entity,
   JoinColumn,
+  ManyToMany,
   ManyToOne,
   PrimaryGeneratedColumn,
 } from 'typeorm';
@@ -10,11 +12,14 @@ import {
 @Entity()
 export class Shift {
   @PrimaryGeneratedColumn('uuid')
-  shiftId: string; // Unique identifier for each shift
+  id: string; // Unique identifier for each shift
 
-  @ManyToOne(() => User, (user) => user.shifts, { onDelete: 'CASCADE' })
-  @JoinColumn()
-  user: User; // Staff member assigned to the shift
+  @ManyToOne(() => Hotel, (hotel) => hotel.shifts)
+  @JoinColumn({ name: 'hotel_id' })
+  hotel: Hotel;
+
+  @ManyToMany(() => User, (user) => user.shifts)
+  users: User[];
 
   @Column('timestamp')
   startTime: Date; // Start time of the shift

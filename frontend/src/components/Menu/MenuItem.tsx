@@ -16,7 +16,7 @@ export const MenuItem = ({
 
   return (
     <div
-      className={`px-2 text-md font-thin rounded-sm cursor-pointer transition-colors duration-150 ease-in-out ${colorClass} ${className}`}
+      className={`px-2 font-thin rounded-sm cursor-pointer transition-colors duration-150 ease-in-out ${colorClass} ${className}`}
       onClick={onClick}
     >
       {children}

@@ -1,6 +1,7 @@
 import { Activity } from 'src/activity/entities/activity.entity';
 import { Organization } from 'src/organization/entities/organization.entity';
 import { Room } from 'src/room/entities/room.entity';
+import { Shift } from 'src/shift/entities/shift.entity';
 import { User } from 'src/user/entities/user.entity';
 import {
   Column,
@@ -47,7 +48,10 @@ export class Hotel {
   rooms: Room[]; // List of rooms in the hotel
 
   @OneToMany(() => User, (user) => user.hotel)
-  users: User[]; // Staff associated with the hotel
+  staff: User[]; // Staff associated with the hotel
+
+  @OneToMany(() => Shift, (shift) => shift.hotel)
+  shifts: Shift[];
 
   @OneToMany(() => Activity, (activity) => activity.hotel)
   activities: Activity[]; // Events hosted by the hotel

@@ -49,13 +49,21 @@ export const HotelsDashboard = () => {
             <MenuItem
               key={`${index}-${hotel.id}`}
               onClick={() => navigate(`/app/hotel/${hotel.id}`)}
-              className="px-4 py-2 border-b-2 border-purple-200 last-of-type:border-b-0"
+              className="px-4 py-2 border-b-2 border-purple-200 last-of-type:border-b-0 flex flex-col"
             >
-              {hotel.name}
-              <br />
-              <span className="text-sm text-gray-500">
-                {hotel.address}, {hotel.city}, {hotel.country}
+              <span className="font-medium text-sm">{hotel.name}</span>
+              <span className="text-xs text-gray-500">
+                {hotel.address}, {hotel.city}
               </span>
+              {hotel.staffCount > 0 ? (
+                <span className="text-sm font-light text-gray-600">
+                  Staff: {hotel.staff.map((staff) => staff.name).join(", ")}
+                </span>
+              ) : (
+                <span className="text-sm font-light text-gray-600">
+                  No staff assigned
+                </span>
+              )}
             </MenuItem>
           ))}
         </div>

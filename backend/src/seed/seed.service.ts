@@ -7,11 +7,14 @@ import { UserHasRole } from 'src/user_roles/user_has_role.entity';
 import { Repository } from 'typeorm';
 import * as argon2 from 'argon2';
 import { Hotel } from 'src/hotel/entities/hotel.entity';
+import { Shift } from 'src/shift/entities/shift.entity';
 
 const userUUID = '5bb911b0-8396-4456-b55b-f931963ee3f0';
 const orgUUID = '5bb911b0-8396-4456-b55b-f931963ee3f1';
 const roleUUID = '5bb911b0-8396-4456-b55b-f931963ee3f2';
 const hotelUUID = '5bb911b0-8396-4456-b55b-f931963ee3f3';
+const shiftUUID1 = '5bb911b0-8396-4456-b55b-f931963ee3f4';
+const shiftUUID2 = '5bb911b0-8396-4456-b55b-f931963ee3f5';
 
 @Injectable()
 export class SeedService {
@@ -30,6 +33,9 @@ export class SeedService {
 
     @InjectRepository(Hotel)
     private readonly hotelRepository: Repository<Hotel>,
+
+    @InjectRepository(Shift)
+    private readonly shiftRepository: Repository<Shift>,
   ) {}
 
   async run() {
@@ -40,6 +46,7 @@ export class SeedService {
     await this.roleRepository.delete({});
     await this.userHasRoleRepository.delete({});
     await this.hotelRepository.delete({});
+    await this.shiftRepository.delete({});
 
     console.log('Seeding database...');
 
@@ -83,10 +90,13 @@ export class SeedService {
       id: userUUID,
       email: 'admin@example.com',
       passwordHash: await argon2.hash('password'),
+      name: 'John Doe',
+      phone: '123-456-7890',
     });
 
     const user2 = this.userRepository.create({
       email: 'member@example.com',
+      name: 'Jane Doe',
       passwordHash: await argon2.hash('password'),
     });
 
@@ -97,16 +107,37 @@ export class SeedService {
     await this.userRepository.save([user1, user2]);
     await this.organizationRepository.save(organization);
 
-    hotel.organization = organization;
-    hotel2.organization = organization;
-    user1.organization = organization;
-    user2.organization = organization;
-
+    hotel.staff = [user1, user2];
     await this.hotelRepository.save(hotel);
-    await this.userRepository.save([user1, user2]);
+
+    console.log('Saving shifts...');
+
+    // Seed shifts
+    const shift1 = this.shiftRepository.create({
+      id: shiftUUID1,
+      notes: 'Morning Shift',
+      startTime: new Date('2024-12-21T08:00:00Z'),
+      endTime: new Date('2024-12-21T16:00:00Z'),
+      hotel,
+    });
+
+    const shift2 = this.shiftRepository.create({
+      id: shiftUUID2,
+      notes: 'Evening Shift',
+      startTime: new Date('2024-12-21T16:00:00Z'),
+      endTime: new Date('2024-12-22T00:00:00Z'),
+      hotel,
+    });
+
+    await this.shiftRepository.save([shift1, shift2]);
+
+    console.log('Assigning users to shifts...');
+
+    shift1.users = [user1];
+    shift2.users = [user2];
+    await this.shiftRepository.save([shift1, shift2]);
 
     console.log('Saving user roles...');
-    console.log(organization);
 
     await this.userHasRoleRepository.save({
       user: user1,

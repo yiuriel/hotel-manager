@@ -12,14 +12,29 @@ export class HotelService {
     private readonly hotelRepository: Repository<Hotel>,
   ) {}
 
-  findHotelsByOrganizationId(organizationId: string) {
+  async findHotelsByOrganizationId(organizationId: string) {
     return plainToInstance(
       HotelDto,
-      this.hotelRepository.find({
-        where: {
-          organization: { id: organizationId },
-        },
-      }),
+      this.hotelRepository
+        .createQueryBuilder('hotel')
+        .leftJoinAndSelect('hotel.staff', 'staff')
+        .loadRelationCountAndMap('hotel.staffCount', 'hotel.staff')
+        .where('hotel.organizationId = :organizationId', { organizationId })
+        .getMany(),
+      { excludeExtraneousValues: true },
+    );
+  }
+
+  async getHotelWithStaffAndShifts(organizationId: string, hotelId: string) {
+    return plainToInstance(
+      HotelDto,
+      this.hotelRepository
+        .createQueryBuilder('hotel')
+        .leftJoinAndSelect('hotel.staff', 'staff')
+        .leftJoinAndSelect('staff.shifts', 'shifts')
+        .where('hotel.id = :hotelId', { hotelId })
+        .andWhere('hotel.organizationId = :organizationId', { organizationId })
+        .getOne(),
       { excludeExtraneousValues: true },
     );
   }

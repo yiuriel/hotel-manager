@@ -1,4 +1,5 @@
-import { Expose } from 'class-transformer';
+import { Expose, Type } from 'class-transformer';
+import { UserStaffDto } from 'src/user/dto/user.staff.dto';
 
 export class HotelDto {
   @Expose()
@@ -27,4 +28,11 @@ export class HotelDto {
 
   @Expose()
   email: string;
+
+  @Type(() => UserStaffDto)
+  @Expose()
+  staff: UserStaffDto[];
+
+  @Expose()
+  staffCount: number;
 }

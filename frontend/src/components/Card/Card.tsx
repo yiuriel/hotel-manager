@@ -14,9 +14,9 @@ export const Card = ({
 }) => {
   return (
     <div className="rounded-md shadow-xl min-h-64 max-h-64 flex flex-col justify-between overflow-hidden">
-      <div className="bg-white">{children}</div>
+      <div className="bg-white h-full overflow-auto">{children}</div>
       {actions && (
-        <div className="flex justify-end mt-4">
+        <div className="flex justify-end">
           {actions.map(({ label, action }, i) => (
             <Button
               key={i}

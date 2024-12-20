@@ -24,7 +24,7 @@ export const UserMenu = () => {
         <ProfileIcon />
       </div>
       {anchorEl && (
-        <Menu anchorEl={anchorEl}>
+        <Menu anchorEl={anchorEl} onClose={() => setAnchorEl(null)}>
           <Link prefetch="viewport" to="/app/profile">
             <MenuItem color="secondary">Profile</MenuItem>
           </Link>

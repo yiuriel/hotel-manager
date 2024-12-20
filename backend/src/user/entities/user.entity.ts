@@ -7,6 +7,9 @@ import {
   Column,
   CreateDateColumn,
   Entity,
+  JoinColumn,
+  JoinTable,
+  ManyToMany,
   ManyToOne,
   OneToMany,
   PrimaryGeneratedColumn,
@@ -18,13 +21,28 @@ export class User {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
+  @Column()
+  name: string;
+
+  @Column({ nullable: true })
+  phone: string;
+
   @Column({ unique: true })
   email: string;
 
   @Column()
   passwordHash: string;
 
-  @OneToMany(() => Shift, (shift) => shift.user)
+  @ManyToOne(() => Hotel, (hotel) => hotel.staff)
+  @JoinColumn({ name: 'hotel_id' })
+  hotel: Hotel;
+
+  @ManyToMany(() => Shift, (shift) => shift.users)
+  @JoinTable({
+    name: 'user_shift',
+    joinColumn: { name: 'user_id', referencedColumnName: 'id' },
+    inverseJoinColumn: { name: 'shift_id', referencedColumnName: 'id' },
+  })
   shifts: Shift[];
 
   @OneToMany(
@@ -35,9 +53,6 @@ export class User {
 
   @OneToMany(() => UserHasRole, (userHasRole) => userHasRole.user)
   roles: UserHasRole[];
-
-  @ManyToOne(() => Hotel, (hotel) => hotel.users)
-  hotel: Hotel;
 
   @ManyToOne(() => Organization, (organization) => organization.users)
   organization: Organization;

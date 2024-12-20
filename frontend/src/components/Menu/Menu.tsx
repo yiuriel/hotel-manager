@@ -10,7 +10,11 @@ import { ClickAway } from "../ClickAway/ClickAway";
 export const Menu = ({
   anchorEl,
   children,
-}: PropsWithChildren<{ anchorEl: HTMLElement | null }>) => {
+  onClose,
+}: PropsWithChildren<{
+  anchorEl: HTMLElement | null;
+  onClose?: () => void;
+}>) => {
   const [open, setOpen] = useState<boolean>(false);
   const [styles, setStyles] = useState<React.CSSProperties>({});
   const menuRef = useRef<HTMLDivElement | null>(null);
@@ -32,6 +36,10 @@ export const Menu = ({
 
     const anchorRect = anchorEl.getBoundingClientRect();
     const menuRect = menuRef.current.getBoundingClientRect();
+    const scrollingElement = document.scrollingElement;
+    const hasScrollBar =
+      (scrollingElement?.scrollHeight ?? 0) >
+      (scrollingElement?.clientHeight ?? 0);
     const { innerWidth, innerHeight } = window;
     const gap = 10;
     const top = anchorRect.bottom + (anchorRect.top > gap ? gap : 0);
@@ -40,7 +48,9 @@ export const Menu = ({
     const menuHeight = menuRect.height;
 
     const adjustedLeft =
-      left + menuWidth + gap > innerWidth ? innerWidth - menuWidth - gap : left;
+      left + menuWidth + gap > innerWidth
+        ? innerWidth - menuWidth - gap - (hasScrollBar ? 10 : 0)
+        : left;
     const adjustedTop =
       top + menuHeight + gap > innerHeight
         ? innerHeight - menuHeight - gap
@@ -55,21 +65,32 @@ export const Menu = ({
 
   const handleToggle = () => {
     setOpen((prev) => !prev);
+
+    if (onClose) {
+      onClose();
+    }
   };
 
   return (
-    <div
-      ref={menuRef}
-      style={{
-        ...styles,
-      }}
-      className="menu bg-purple-600 text-white shadow-lg p-2 rounded-md"
-      onClick={handleToggle}
-      hidden={!open}
-    >
-      <ClickAway onClickAway={() => setOpen(false)}>
-        <div className="flex flex-col space-y-2">{children}</div>
-      </ClickAway>
+    <div className="fixed right-0 left-0 top-0 bottom-0" onClick={handleToggle}>
+      <div
+        ref={menuRef}
+        style={{
+          ...styles,
+        }}
+        className="menu bg-purple-600 text-white shadow-lg p-2 rounded-md"
+        onClick={handleToggle}
+        hidden={!open}
+      >
+        <ClickAway
+          onClickAway={() => {
+            onClose?.();
+            setOpen(false);
+          }}
+        >
+          <div className="flex flex-col space-y-2">{children}</div>
+        </ClickAway>
+      </div>
     </div>
   );
 };
