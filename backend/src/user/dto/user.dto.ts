@@ -1,5 +1,5 @@
-import { Exclude, Expose, Type } from 'class-transformer';
-import { RoleDto } from 'src/role/dto/role.dto';
+import { Exclude, Expose, Transform, Type } from 'class-transformer';
+import { OrganizationDto } from 'src/organization/dto/organization.dto';
 
 export class UserDto {
   @Expose()
@@ -11,9 +11,15 @@ export class UserDto {
   @Expose()
   name: string;
 
-  @Type(() => RoleDto)
   @Expose()
-  roles: RoleDto[];
+  @Transform(({ obj }) => {
+    return obj?.roles?.map((userRole: any) => userRole.role.name);
+  })
+  roles: string[]; // Flatten roles into an array of role names
+
+  @Type(() => OrganizationDto)
+  @Expose()
+  organization: OrganizationDto;
 
   @Exclude()
   password: string; // Exclude sensitive data

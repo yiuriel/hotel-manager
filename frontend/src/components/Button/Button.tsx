@@ -15,7 +15,7 @@ export const Button = ({
 
   const colorClass = {
     primary: "text-yellow-50",
-    secondary: "text-yellow-600",
+    secondary: "bg-yellow-500 text-grey-700 hover:bg-yellow-400",
   }[color];
 
   return (

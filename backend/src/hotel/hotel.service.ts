@@ -1,26 +1,26 @@
 import { Injectable } from '@nestjs/common';
-import { CreateHotelDto } from './dto/create-hotel.dto';
-import { UpdateHotelDto } from './dto/update-hotel.dto';
+import { InjectRepository } from '@nestjs/typeorm';
+import { plainToInstance } from 'class-transformer';
+import { Repository } from 'typeorm';
+import { HotelDto } from './dto/hotel.dto';
+import { Hotel } from './entities/hotel.entity';
 
 @Injectable()
 export class HotelService {
-  create(createHotelDto: CreateHotelDto) {
-    return 'This action adds a new hotel';
-  }
+  constructor(
+    @InjectRepository(Hotel)
+    private readonly hotelRepository: Repository<Hotel>,
+  ) {}
 
-  findAll() {
-    return `This action returns all hotel`;
-  }
-
-  findOne(id: number) {
-    return `This action returns a #${id} hotel`;
-  }
-
-  update(id: number, updateHotelDto: UpdateHotelDto) {
-    return `This action updates a #${id} hotel`;
-  }
-
-  remove(id: number) {
-    return `This action removes a #${id} hotel`;
+  findHotelsByOrganizationId(organizationId: string) {
+    return plainToInstance(
+      HotelDto,
+      this.hotelRepository.find({
+        where: {
+          organization: { id: organizationId },
+        },
+      }),
+      { excludeExtraneousValues: true },
+    );
   }
 }

@@ -14,7 +14,7 @@ import {
 @Entity()
 export class Hotel {
   @PrimaryGeneratedColumn('uuid')
-  hotelId: string; // Unique identifier for each hotel
+  id: string; // Unique identifier for each hotel
 
   @Column({ length: 255 })
   name: string; // Hotel name

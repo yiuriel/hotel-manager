@@ -19,7 +19,7 @@ export class GuestReview {
   @JoinColumn()
   guest: Guest; // Guest who left the review
 
-  @ManyToOne(() => Hotel, (hotel) => hotel.hotelId, { onDelete: 'CASCADE' })
+  @ManyToOne(() => Hotel, (hotel) => hotel.id, { onDelete: 'CASCADE' })
   @JoinColumn()
   hotel: Hotel; // Hotel being reviewed
 

@@ -67,7 +67,7 @@ export const Menu = ({
       onClick={handleToggle}
       hidden={!open}
     >
-      <ClickAway onClickAway={handleToggle}>
+      <ClickAway onClickAway={() => setOpen(false)}>
         <div className="flex flex-col space-y-2">{children}</div>
       </ClickAway>
     </div>

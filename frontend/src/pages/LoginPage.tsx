@@ -1,13 +1,14 @@
 import { useNavigate } from "react-router";
 import { LoginForm } from "../components/LoginForm/LoginForm";
 import { useVerifyQuery } from "../redux/auth/auth.api";
+import { Loading } from "../components/Loading/Loading";
 
 export const LoginPage = () => {
   const navigate = useNavigate();
   const { data: user, isLoading } = useVerifyQuery(undefined);
 
   if (isLoading) {
-    return <div className="p-4">Loading...</div>;
+    return <Loading size="lg" />;
   } else if (user) {
     navigate("/app");
   }

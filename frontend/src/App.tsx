@@ -1,15 +1,21 @@
+import { useEffect } from "react";
 import { Outlet, useNavigate } from "react-router";
 import { Nav } from "./components/Nav/Nav";
-import { useVerifyQuery } from "./redux/auth/auth.api";
+import { useAppStartup } from "./hooks/useAppStartup";
+import { Loading } from "./components/Loading/Loading";
 
 export function App() {
   const navigate = useNavigate();
-  const { error, isLoading } = useVerifyQuery(undefined);
+  const { loading, error } = useAppStartup();
 
-  if (isLoading) {
-    return <div className="p-4">Loading...</div>;
-  } else if (error) {
-    navigate("/");
+  useEffect(() => {
+    if (!loading && error) {
+      navigate("/");
+    }
+  }, [loading, error, navigate]);
+
+  if (loading) {
+    return <Loading size="lg" />;
   }
 
   return (

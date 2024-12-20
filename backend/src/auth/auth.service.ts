@@ -78,12 +78,10 @@ export class AuthService {
 
   async getProfile(id: string) {
     const dbUser = await this.userService.findById(id);
-    console.log({ dbUser });
 
     const userDto = plainToInstance(UserDto, dbUser, {
       excludeExtraneousValues: true,
     });
-    console.log({ userDto });
 
     return userDto;
   }

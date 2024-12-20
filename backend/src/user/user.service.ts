@@ -36,15 +36,12 @@ export class UserService {
   }
 
   async findById(id: string) {
-    console.log(await this.userRepository.find());
-
     return this.userRepository.findOne({
       where: { id },
       relations: {
         roles: {
           role: true,
         },
-        organization: true,
       },
     });
   }

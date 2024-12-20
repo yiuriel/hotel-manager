@@ -26,9 +26,10 @@ export const UserMenu = () => {
       {anchorEl && (
         <Menu anchorEl={anchorEl}>
           <Link prefetch="viewport" to="/app/profile">
-            <MenuItem>Profile</MenuItem>
+            <MenuItem color="secondary">Profile</MenuItem>
           </Link>
           <MenuItem
+            color="secondary"
             onClick={async () => {
               await logout(undefined);
 

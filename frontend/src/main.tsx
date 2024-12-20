@@ -8,6 +8,8 @@ import { store } from "./redux/store.ts";
 
 import "./index.css";
 import { ProfilePage } from "./pages/ProfilePage.tsx";
+import { Dashboard } from "./pages/Dashboard.tsx";
+import { NotFoundPage } from "./pages/NotFoundPage.tsx";
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
@@ -16,8 +18,11 @@ createRoot(document.getElementById("root")!).render(
         <Routes>
           <Route path="/" element={<LoginPage />} />
           <Route path="/app" element={<App />}>
+            <Route index element={<Dashboard />} />
             <Route path="profile" element={<ProfilePage />} />
+            <Route path="hotel" element={<div>Hotels</div>} />
           </Route>
+          <Route path="*" element={<NotFoundPage />} />
         </Routes>
       </BrowserRouter>
     </Provider>
