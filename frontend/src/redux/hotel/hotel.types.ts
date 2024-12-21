@@ -1,21 +1,21 @@
-type HotelStaff = {
-  id: number;
+export type HotelStaff = {
+  id: string;
   email: string;
   name: string;
 };
 
-type StaffShift = {
+export type StaffShift = {
   id: string;
   startTime: string;
   endTime: string;
   notes: string;
 };
 
-type HotelStaffWithShifts = HotelStaff & {
+export type HotelStaffWithShifts = HotelStaff & {
   shifts: StaffShift[];
 };
 
-type Hotel<T extends object = HotelStaff> = {
+export type Hotel<T extends object = HotelStaff> = {
   id: string;
   name: string;
   address: string;

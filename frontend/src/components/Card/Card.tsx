@@ -20,7 +20,7 @@ export const Card = ({
           {actions.map(({ label, action }, i) => (
             <Button
               key={i}
-              className="px-4 py-2 flex-1 rounded-none"
+              className="px-4 py-2 flex-1 !rounded-none"
               color={i === 0 ? "primary" : "secondary"}
               onClick={action}
             >

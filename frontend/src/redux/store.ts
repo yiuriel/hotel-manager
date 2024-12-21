@@ -4,6 +4,7 @@ import { authSlice } from "./auth/auth.slice";
 import { organizationApi } from "./organization/organization.api";
 import { organizationSlice } from "./organization/organization.slice";
 import { hotelApi } from "./hotel/hotel.api";
+import { hotelSlice } from "./hotel/hotel.slice";
 
 export const store = configureStore({
   reducer: {
@@ -12,6 +13,7 @@ export const store = configureStore({
     [organizationApi.reducerPath]: organizationApi.reducer,
     organization: organizationSlice.reducer,
     [hotelApi.reducerPath]: hotelApi.reducer,
+    hotel: hotelSlice.reducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware()

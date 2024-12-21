@@ -32,6 +32,7 @@ export class HotelService {
         .createQueryBuilder('hotel')
         .leftJoinAndSelect('hotel.staff', 'staff')
         .leftJoinAndSelect('staff.shifts', 'shifts')
+        .loadRelationCountAndMap('hotel.staffCount', 'hotel.staff')
         .where('hotel.id = :hotelId', { hotelId })
         .andWhere('hotel.organizationId = :organizationId', { organizationId })
         .getOne(),

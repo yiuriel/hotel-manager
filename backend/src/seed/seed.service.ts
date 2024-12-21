@@ -129,13 +129,21 @@ export class SeedService {
       hotel,
     });
 
-    await this.shiftRepository.save([shift1, shift2]);
+    const shift3 = this.shiftRepository.create({
+      notes: 'Full day Shift',
+      startTime: new Date('2024-12-24T00:00:00Z'),
+      endTime: new Date('2024-12-25T08:00:00Z'),
+      hotel,
+    });
+
+    await this.shiftRepository.save([shift1, shift2, shift3]);
 
     console.log('Assigning users to shifts...');
 
     shift1.users = [user1];
     shift2.users = [user2];
-    await this.shiftRepository.save([shift1, shift2]);
+    shift3.users = [user1];
+    await this.shiftRepository.save([shift1, shift2, shift3]);
 
     console.log('Saving user roles...');
 

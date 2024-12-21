@@ -6,7 +6,7 @@ export const Nav = () => {
   const isLoggedIn = useAppSelector((state) => state.auth.isLoggedIn);
 
   return (
-    <nav className="flex justify-between p-4 shadow-md">
+    <nav className="flex justify-between p-4 shadow-md sticky top-0 z-10 bg-white">
       <div className="flex gap-2">
         <Link prefetch="viewport" to="/app">
           Home
