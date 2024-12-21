@@ -1,10 +1,10 @@
 import { useEffect } from "react";
-import { useAppSelector } from "../redux/hooks";
-import { useLazyGetHotelsQuery } from "../redux/hotel/hotel.api";
-import { Card } from "./Card/Card";
+import { useAppSelector } from "../../redux/hooks";
+import { useLazyGetHotelsQuery } from "../../redux/hotel/hotel.api";
+import { Card } from "../Card/Card";
 import { useNavigate } from "react-router";
-import { MenuItem } from "./Menu/MenuItem";
-import { Loading } from "./Loading/Loading";
+import { MenuItem } from "../Menu/MenuItem";
+import { Loading } from "../Loading/Loading";
 
 export const HotelsDashboard = () => {
   const navigate = useNavigate();

@@ -1,4 +1,4 @@
-import { HotelsDashboard } from "../components/HotelsDashboard";
+import { HotelsDashboard } from "../components/HotelsDashboard/HotelsDashboard";
 
 export const Dashboard = () => {
   return (
