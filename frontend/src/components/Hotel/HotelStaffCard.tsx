@@ -1,7 +1,7 @@
 import { FC } from "react";
-import { HotelStaffWithShifts } from "../../redux/hotel/hotel.types";
 import { useAppSelector } from "../../redux/hooks";
-import { Button } from "../Button/Button";
+import { HotelStaffWithShifts } from "../../redux/hotel/hotel.types";
+import { StaffAddShift } from "../Staff/StaffAddShift";
 
 export const HotelStaffCard: FC<{
   staffMember: HotelStaffWithShifts;
@@ -21,15 +21,7 @@ export const HotelStaffCard: FC<{
     >
       <div className="flex items-center justify-between">
         <span className="text-lg font-bold">{staffMember.name}</span>
-        <Button
-          className="bg-blue-500 hover:bg-blue-600 text-white !py-1 !text-xs !px-2 rounded-sm"
-          onClick={(e) => {
-            e.stopPropagation();
-            console.log("Add Shifts");
-          }}
-        >
-          Add Shifts
-        </Button>
+        <StaffAddShift staffMember={staffMember} />
       </div>
       <span className={`px-2 py-1 cursor-pointer truncate`}>
         {staffMember.email}

@@ -1,26 +1,29 @@
-import { Injectable } from '@nestjs/common';
+import { HttpException, Injectable } from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
 import { CreateShiftDto } from './dto/create-shift.dto';
-import { UpdateShiftDto } from './dto/update-shift.dto';
+import { Shift } from './entities/shift.entity';
 
 @Injectable()
 export class ShiftService {
-  create(createShiftDto: CreateShiftDto) {
-    return 'This action adds a new shift';
-  }
+  constructor(
+    @InjectRepository(Shift)
+    private readonly shiftRepository: Repository<Shift>,
+  ) {}
 
-  findAll() {
-    return `This action returns all shift`;
-  }
-
-  findOne(id: number) {
-    return `This action returns a #${id} shift`;
-  }
-
-  update(id: number, updateShiftDto: UpdateShiftDto) {
-    return `This action updates a #${id} shift`;
-  }
-
-  remove(id: number) {
-    return `This action removes a #${id} shift`;
+  async create(createShiftDto: CreateShiftDto, hotelId: string) {
+    try {
+      const newShift = this.shiftRepository.create({
+        notes: createShiftDto.notes,
+        startTime: createShiftDto.startTime,
+        endTime: createShiftDto.endTime,
+        hotel: { id: hotelId },
+        users: [{ id: createShiftDto.staffId }],
+      });
+      await this.shiftRepository.save(newShift);
+      return { message: 'Shift created successfully' };
+    } catch (error) {
+      throw new HttpException(error.message, 400);
+    }
   }
 }

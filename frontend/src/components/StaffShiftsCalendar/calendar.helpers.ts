@@ -22,8 +22,9 @@ export function shiftIsWithinDate(
       dateNumber.toDateString() === shiftEndDate.toDateString();
 
     return (
-      isSameDayOrBeforeEndDate &&
-      (isWithinShiftHoursOnStartDate || isWithinShiftHoursOnEndDate)
+      isSameDayOrBeforeEndDate ||
+      isWithinShiftHoursOnStartDate ||
+      isWithinShiftHoursOnEndDate
     );
   };
 }
@@ -36,12 +37,12 @@ export function shiftIsWithinDay(
     const shiftEndDate = parseISO(shift.endTime);
 
     const isWithinShiftDaysOnStartDate =
-      dateNumber.toDateString() === shiftStartDate.toDateString();
+      dateNumber.getTime() >= shiftStartDate.getTime();
 
     const isWithinShiftDaysOnEndDate =
-      dateNumber.toDateString() === shiftEndDate.toDateString();
+      dateNumber.getTime() <= shiftEndDate.getTime();
 
-    return isWithinShiftDaysOnStartDate || isWithinShiftDaysOnEndDate;
+    return isWithinShiftDaysOnStartDate && isWithinShiftDaysOnEndDate;
   };
 }
 

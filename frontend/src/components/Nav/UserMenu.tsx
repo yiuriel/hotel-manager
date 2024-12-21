@@ -4,6 +4,7 @@ import { Menu } from "../Menu/Menu";
 import { useState } from "react";
 import { MenuItem } from "../Menu/MenuItem";
 import { useLogoutMutation } from "../../redux/auth/auth.api";
+import { HoverableIcon } from "../Icons/HoverableIcon";
 
 export const UserMenu = () => {
   const [logout] = useLogoutMutation();
@@ -21,7 +22,9 @@ export const UserMenu = () => {
           setAnchorEl(e.currentTarget);
         }}
       >
-        <ProfileIcon />
+        <HoverableIcon>
+          <ProfileIcon />
+        </HoverableIcon>
       </div>
       {anchorEl && (
         <Menu anchorEl={anchorEl} onClose={() => setAnchorEl(null)}>

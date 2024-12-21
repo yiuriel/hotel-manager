@@ -74,7 +74,7 @@ export const StaffShiftsCalendar = () => {
                   onClick={handleTodayButtonClick}
                   className="cursor-pointer bg-yellow-200 px-2 py-1 rounded-sm ml-2"
                 >
-                  Today
+                  jump to Today
                 </small>
               )}
             </div>

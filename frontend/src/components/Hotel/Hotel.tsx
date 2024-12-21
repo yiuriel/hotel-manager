@@ -9,13 +9,9 @@ export const Hotel: FC<{ hotel: HotelResponse }> = ({ hotel }) => {
   }
 
   return (
-    <div className="flex flex-row gap-4 mt-4 mx-4">
-      <div className="w-1/2">
-        <HotelInfoCard />
-      </div>
-      <div className="w-1/2">
-        <StaffShiftsCalendar />
-      </div>
+    <div className="grid grid-cols-2 gap-4 mt-4 mx-4">
+      <HotelInfoCard />
+      <StaffShiftsCalendar />
     </div>
   );
 };

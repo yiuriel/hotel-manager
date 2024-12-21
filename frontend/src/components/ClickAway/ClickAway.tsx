@@ -25,5 +25,9 @@ export const ClickAway = ({
     };
   }, [onClickAway]);
 
-  return <div ref={containerRef}>{children}</div>;
+  return (
+    <div ref={containerRef} className="w-full">
+      {children}
+    </div>
+  );
 };

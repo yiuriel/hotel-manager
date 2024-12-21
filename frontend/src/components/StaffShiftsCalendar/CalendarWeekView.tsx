@@ -66,7 +66,7 @@ export const CalendarWeekView: FC<{ shifts: StaffShift[]; date: Date }> = ({
                   key={currentDayOfWeek}
                   className={`border border-purple-500 h-8 w-12 ${
                     isToday ? "bg-yellow-500" : ""
-                  } ${hasShift ? "bg-green-300" : ""}`}
+                  } ${hasShift ? "bg-green-300 bg-opacity-50" : ""}`}
                 ></td>
               );
             })}

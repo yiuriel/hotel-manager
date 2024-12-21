@@ -23,15 +23,16 @@ export const CalendarMonthView: FC<{
           i - (new Date(date.getFullYear(), date.getMonth()).getDay() - 1)
         );
         const isToday = dateNumber.toDateString() === new Date().toDateString();
-        const isShiftWithinDay = shifts.some(shiftIsWithinDay(dateNumber));
-        const hasShift = isShiftDay(dateNumber, shifts) && isShiftWithinDay;
+        const hasShift =
+          shifts.some(shiftIsWithinDay(dateNumber)) ||
+          isShiftDay(dateNumber, shifts);
         const isSameMonth = dateNumber.getMonth() === date.getMonth();
 
         return (
           <div
             key={i}
             className={`${isToday ? "bg-yellow-500" : ""} ${
-              hasShift ? "!bg-green-300" : ""
+              hasShift ? "bg-green-300 bg-opacity-50" : ""
             } ${
               isSameMonth ? "" : "text-gray-400"
             } text-center w-10 h-10 flex items-center justify-center`}
