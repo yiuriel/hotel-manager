@@ -5,7 +5,8 @@ import { StaffShift } from "../../redux/hotel/hotel.types";
 export const CalendarMonthView: FC<{
   date: Date;
   shifts: StaffShift[];
-}> = ({ date, shifts }) => {
+  onDayClick: (date: Date) => void;
+}> = ({ date, shifts, onDayClick }) => {
   return (
     <div className="grid grid-cols-7 gap-2 place-items-center">
       {["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"].map((day) => (
@@ -31,11 +32,12 @@ export const CalendarMonthView: FC<{
         return (
           <div
             key={i}
-            className={`${isToday ? "bg-yellow-500" : ""} ${
+            className={`${isToday ? "bg-yellow-500 bg-opacity-80" : ""} ${
               hasShift ? "bg-green-300 bg-opacity-50" : ""
-            } ${
+            } ${isToday && hasShift ? "bg-lime-400 bg-opacity-65" : ""} ${
               isSameMonth ? "" : "text-gray-400"
-            } text-center w-10 h-10 flex items-center justify-center`}
+            } text-center w-10 h-10 flex items-center justify-center rounded-md cursor-pointer hover:bg-blue-500 hover:text-white`}
+            onClick={() => onDayClick(dateNumber)}
           >
             {dateNumber.getDate()}
           </div>

@@ -11,6 +11,7 @@ import { ProfilePage } from "./pages/ProfilePage.tsx";
 import { Dashboard } from "./pages/Dashboard.tsx";
 import { NotFoundPage } from "./pages/NotFoundPage.tsx";
 import { HotelPage } from "./pages/HotelPage.tsx";
+import { AddHotelPage } from "./pages/AddHotelPage.tsx";
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
@@ -22,6 +23,7 @@ createRoot(document.getElementById("root")!).render(
             <Route index element={<Dashboard />} />
             <Route path="profile" element={<ProfilePage />} />
             <Route path="hotel" element={<div>Hotels</div>} />
+            <Route path="hotel/new" element={<AddHotelPage />} />
             <Route path="hotel/:hotelId" element={<HotelPage />} />
           </Route>
           <Route path="*" element={<NotFoundPage />} />

@@ -15,7 +15,7 @@ export const CalendarWeekView: FC<{ shifts: StaffShift[]; date: Date }> = ({
             const dateOfWeek = new Date(
               date.getFullYear(),
               date.getMonth(),
-              date.getDate() + i - (new Date().getDay() - 1)
+              date.getDate() + i - new Date().getDay()
             );
             return (
               <th key={i} className="border border-purple-500">

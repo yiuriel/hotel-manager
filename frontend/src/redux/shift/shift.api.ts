@@ -3,7 +3,9 @@ import { ShiftRequest } from "./shift.types";
 
 export const shiftApi = createApi({
   reducerPath: "shiftApi",
-  baseQuery: fetchBaseQuery({ baseUrl: "http://localhost:3001/hotel" }),
+  baseQuery: fetchBaseQuery({
+    baseUrl: `${import.meta.env.VITE_API_URL}/hotel`,
+  }),
   endpoints: (builder) => ({
     addShift: builder.mutation<
       { message: string },

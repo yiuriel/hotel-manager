@@ -16,6 +16,7 @@ async function bootstrap() {
   await seedService.run();
 
   app.use(cookieParser());
+  app.setGlobalPrefix('api');
   await app.listen(3001);
 }
 bootstrap();

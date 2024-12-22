@@ -1,9 +1,10 @@
-import { Injectable } from '@nestjs/common';
+import { HttpException, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { plainToInstance } from 'class-transformer';
 import { Repository } from 'typeorm';
 import { HotelDto } from './dto/hotel.dto';
 import { Hotel } from './entities/hotel.entity';
+import { CreateHotelDto } from './dto/create-hotel.dto';
 
 @Injectable()
 export class HotelService {
@@ -38,5 +39,17 @@ export class HotelService {
         .getOne(),
       { excludeExtraneousValues: true },
     );
+  }
+
+  async addNewHotel(organizationId: string, newHotelDto: CreateHotelDto) {
+    try {
+      await this.hotelRepository.save({
+        ...newHotelDto,
+        organization: { id: organizationId },
+      });
+      return { ok: true, message: 'Hotel added successfully' };
+    } catch (error) {
+      throw new HttpException(error.message, 400);
+    }
   }
 }

@@ -31,3 +31,5 @@ export type Hotel<T extends object = HotelStaff> = {
 
 export type HotelResponse = Hotel<HotelStaffWithShifts>;
 export type ManyHotelResponse = Hotel[];
+
+export type CreateHotelDto = Omit<Hotel, "id" | "staffCount" | "staff">;

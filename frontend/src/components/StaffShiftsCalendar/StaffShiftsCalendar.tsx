@@ -7,6 +7,7 @@ import {
   selectSelectedStaffMember,
   selectStaffShiftsByStaffId,
 } from "../../redux/hotel/hotel.slice";
+import { startOfWeek } from "date-fns/startOfWeek";
 
 export const StaffShiftsCalendar = () => {
   const selectedStaffMember = useAppSelector(selectSelectedStaffMember);
@@ -30,6 +31,8 @@ export const StaffShiftsCalendar = () => {
     if (view === "month") {
       changeMonth(-1);
     } else {
+      const firstDayOfWeek = startOfWeek(new Date(date.getTime()));
+      setDate(firstDayOfWeek);
       changeDate(-7);
     }
   };
@@ -38,12 +41,20 @@ export const StaffShiftsCalendar = () => {
     if (view === "month") {
       changeMonth(1);
     } else {
+      const firstDayOfWeek = startOfWeek(new Date(date.getTime()));
+      setDate(firstDayOfWeek);
       changeDate(7);
     }
   };
 
   const handleTodayButtonClick = () => {
     setDate(new Date());
+  };
+
+  const onDayClick = (clickedDate: Date) => {
+    const firstDayOfWeek = startOfWeek(new Date(clickedDate.getTime()));
+    setDate(firstDayOfWeek);
+    setView("week");
   };
 
   if (!selectedStaffMember) {
@@ -61,7 +72,10 @@ export const StaffShiftsCalendar = () => {
         {view === "month" ? "Week" : "Month"}
       </Button>
       <div className="flex justify-between">
-        <Button onClick={previousMonth} className="w-10 h-10 !rounded-none">
+        <Button
+          onClick={previousMonth}
+          className="w-10 h-10 !rounded-none text-white"
+        >
           &lt;
         </Button>
         <div className="flex-1 flex-nowrap flex text-center justify-center items-center">
@@ -86,12 +100,19 @@ export const StaffShiftsCalendar = () => {
             </div>
           )}
         </div>
-        <Button onClick={nextMonth} className="w-10 h-10 !rounded-none">
+        <Button
+          onClick={nextMonth}
+          className="w-10 h-10 !rounded-none text-white"
+        >
           &gt;
         </Button>
       </div>
       {view === "month" ? (
-        <CalendarMonthView shifts={shifts} date={date} />
+        <CalendarMonthView
+          shifts={shifts}
+          date={date}
+          onDayClick={onDayClick}
+        />
       ) : (
         <CalendarWeekView shifts={shifts} date={date} />
       )}

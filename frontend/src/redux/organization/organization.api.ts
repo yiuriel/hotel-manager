@@ -2,7 +2,9 @@ import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 
 export const organizationApi = createApi({
   reducerPath: "organizationApi",
-  baseQuery: fetchBaseQuery({ baseUrl: "http://localhost:3001/organization" }),
+  baseQuery: fetchBaseQuery({
+    baseUrl: `${import.meta.env.VITE_API_URL}/organization`,
+  }),
   endpoints: (builder) => ({
     getOrganization: builder.query({
       query: () => ({

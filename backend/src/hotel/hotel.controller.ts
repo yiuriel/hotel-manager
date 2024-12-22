@@ -1,6 +1,7 @@
-import { Controller, Get, Param, UseGuards } from '@nestjs/common';
+import { Body, Controller, Get, Param, Post, UseGuards } from '@nestjs/common';
 import { AuthGuard } from 'src/auth/auth.guard';
 import { HotelService } from './hotel.service';
+import { CreateHotelDto } from './dto/create-hotel.dto';
 
 @Controller('organization/:organizationId/hotel')
 export class HotelController {
@@ -22,5 +23,14 @@ export class HotelController {
       organizationId,
       hotelId,
     );
+  }
+
+  @UseGuards(AuthGuard)
+  @Post()
+  async addNewHotel(
+    @Param('organizationId') organizationId: string,
+    @Body() hotel: CreateHotelDto,
+  ) {
+    return this.hotelService.addNewHotel(organizationId, hotel);
   }
 }

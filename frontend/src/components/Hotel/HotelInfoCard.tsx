@@ -41,8 +41,8 @@ export const HotelInfoCard = () => {
           {hotel.staffCount}
         </div>
       </div>
-      <h2 className="text-2xl">Staff</h2>
-      <ul className="grid md:grid-cols-2 lg:grid-cols-3 grid-cols-1">
+      <h2 className="text-xl my-2">Staff:</h2>
+      <ul className="grid md:grid-cols-2 lg:grid-cols-3 grid-cols-1 gap-2">
         {hotel.staff.map((staffMember) => (
           <HotelStaffCard
             key={staffMember.id}

@@ -20,7 +20,7 @@ export const Input = ({
 
   return (
     <input
-      className={`text-sm px-2 py-1 rounded-sm shadow-sm focus:outline-none transition duration-150 ease-in-out w-full ${variantClass} ${colorClass} ${className}`}
+      className={`text-sm px-2 py-1 rounded-md shadow-sm focus:outline-none transition duration-150 ease-in-out w-full ${variantClass} ${colorClass} ${className}`}
       {...props}
     />
   );
