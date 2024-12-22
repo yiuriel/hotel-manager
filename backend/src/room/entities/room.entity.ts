@@ -16,10 +16,10 @@ import {
 @Entity()
 export class Room {
   @PrimaryGeneratedColumn('uuid')
-  roomId: string; // Unique identifier for each room
+  id: string; // Unique identifier for each room
 
   @ManyToOne(() => Hotel, (hotel) => hotel.rooms, { onDelete: 'CASCADE' })
-  @JoinColumn()
+  @JoinColumn({ name: 'hotel_id' })
   hotel: Hotel; // Hotel this room belongs to
 
   @Column({ length: 10 })

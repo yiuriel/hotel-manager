@@ -8,6 +8,7 @@ import { Role } from 'src/role/entities/role.entity';
 import { UserHasRole } from 'src/user_roles/user_has_role.entity';
 import { Hotel } from 'src/hotel/entities/hotel.entity';
 import { Shift } from 'src/shift/entities/shift.entity';
+import { Room } from 'src/room/entities/room.entity';
 
 @Module({
   imports: [
@@ -18,6 +19,7 @@ import { Shift } from 'src/shift/entities/shift.entity';
       UserHasRole,
       Hotel,
       Shift,
+      Room,
     ]),
   ],
   providers: [SeedService, UserService],

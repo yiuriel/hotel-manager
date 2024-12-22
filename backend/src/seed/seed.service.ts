@@ -8,6 +8,7 @@ import { Repository } from 'typeorm';
 import * as argon2 from 'argon2';
 import { Hotel } from 'src/hotel/entities/hotel.entity';
 import { Shift } from 'src/shift/entities/shift.entity';
+import { Room } from 'src/room/entities/room.entity';
 
 const userUUID = '5bb911b0-8396-4456-b55b-f931963ee3f0';
 const orgUUID = '5bb911b0-8396-4456-b55b-f931963ee3f1';
@@ -36,6 +37,9 @@ export class SeedService {
 
     @InjectRepository(Shift)
     private readonly shiftRepository: Repository<Shift>,
+
+    @InjectRepository(Room)
+    private readonly roomRepository: Repository<Room>,
   ) {}
 
   async run() {
@@ -47,6 +51,7 @@ export class SeedService {
     await this.userHasRoleRepository.delete({});
     await this.hotelRepository.delete({});
     await this.shiftRepository.delete({});
+    await this.roomRepository.delete({});
 
     console.log('Seeding database...');
 
@@ -107,6 +112,27 @@ export class SeedService {
     await this.userRepository.save([user1, user2]);
     await this.organizationRepository.save(organization);
 
+    const room1 = this.roomRepository.create({
+      id: '5bb911b0-8396-4456-b55b-f931963ee3f6',
+      roomNumber: 'Room 1',
+      roomType: 'Standard',
+      pricePerNight: 50,
+      capacity: 10,
+      hotel,
+    });
+
+    const room2 = this.roomRepository.create({
+      id: '5bb911b0-8396-4456-b55b-f931963ee3f7',
+      roomNumber: 'Room 2',
+      roomType: 'Deluxe',
+      pricePerNight: 100,
+      capacity: 4,
+      hotel,
+    });
+
+    await this.roomRepository.save([room1, room2]);
+
+    hotel.rooms = [room1, room2];
     hotel.staff = [user1, user2];
     await this.hotelRepository.save(hotel);
 

@@ -57,10 +57,6 @@ export const StaffShiftsCalendar = () => {
     setView("week");
   };
 
-  if (!selectedStaffMember) {
-    return null;
-  }
-
   return (
     <div className="flex flex-col shadow-md rounded-sm">
       <Button

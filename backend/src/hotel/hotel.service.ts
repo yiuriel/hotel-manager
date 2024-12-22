@@ -20,6 +20,8 @@ export class HotelService {
         .createQueryBuilder('hotel')
         .leftJoinAndSelect('hotel.staff', 'staff')
         .loadRelationCountAndMap('hotel.staffCount', 'hotel.staff')
+        .leftJoinAndSelect('hotel.rooms', 'rooms')
+        .loadRelationCountAndMap('hotel.roomCount', 'hotel.rooms')
         .where('hotel.organizationId = :organizationId', { organizationId })
         .getMany(),
       { excludeExtraneousValues: true },
@@ -34,6 +36,8 @@ export class HotelService {
         .leftJoinAndSelect('hotel.staff', 'staff')
         .leftJoinAndSelect('staff.shifts', 'shifts')
         .loadRelationCountAndMap('hotel.staffCount', 'hotel.staff')
+        .leftJoinAndSelect('hotel.rooms', 'rooms')
+        .loadRelationCountAndMap('hotel.roomCount', 'hotel.rooms')
         .where('hotel.id = :hotelId', { hotelId })
         .andWhere('hotel.organizationId = :organizationId', { organizationId })
         .getOne(),

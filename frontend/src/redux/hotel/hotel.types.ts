@@ -11,6 +11,16 @@ export type StaffShift = {
   notes: string;
 };
 
+export type HotelRoom = {
+  id: string;
+  roomNumber: string;
+  roomType: string;
+  capacity: number;
+  pricePerNight: string;
+  description: string;
+  isAvailable: boolean;
+};
+
 export type HotelStaffWithShifts = HotelStaff & {
   shifts: StaffShift[];
 };
@@ -27,9 +37,14 @@ export type Hotel<T extends object = HotelStaff> = {
   email: string;
   staffCount: number;
   staff: T[];
+  rooms: HotelRoom[];
+  roomCount: number;
 };
 
 export type HotelResponse = Hotel<HotelStaffWithShifts>;
 export type ManyHotelResponse = Hotel[];
 
-export type CreateHotelDto = Omit<Hotel, "id" | "staffCount" | "staff">;
+export type CreateHotelDto = Omit<
+  Hotel,
+  "id" | "staffCount" | "staff" | "rooms" | "roomCount"
+>;

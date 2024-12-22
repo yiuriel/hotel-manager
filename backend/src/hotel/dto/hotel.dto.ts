@@ -1,4 +1,5 @@
 import { Expose, Type } from 'class-transformer';
+import { RoomDto } from 'src/room/dto/room.dto';
 import { UserStaffDto } from 'src/user/dto/user.staff.dto';
 
 export class HotelDto {
@@ -35,4 +36,11 @@ export class HotelDto {
 
   @Expose()
   staffCount: number;
+
+  @Type(() => RoomDto)
+  @Expose()
+  rooms: RoomDto[];
+
+  @Expose()
+  roomCount: number;
 }
