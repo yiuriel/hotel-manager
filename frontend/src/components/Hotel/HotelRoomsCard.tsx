@@ -1,5 +1,6 @@
 import { useAppSelector } from "../../redux/hooks";
 import { Button } from "../Button/Button";
+import { RoomListItem } from "../RoomListItem/RoomListItem";
 
 export const HotelRoomsCard = () => {
   const hotel = useAppSelector((state) => state.hotel.currentHotel);
@@ -14,39 +15,9 @@ export const HotelRoomsCard = () => {
         Rooms <Button size="sm">add room</Button>
       </h2>
       <ul className="flex flex-col">
-        {hotel.rooms.map((room) => {
-          const price = room?.pricePerNight;
-
-          return (
-            <li
-              key={room.id}
-              className="flex justify-between p-2 border-t hover:bg-purple-100 cursor-pointer"
-            >
-              {room.roomNumber} - {room.roomType}{" "}
-              <div>
-                capacity: ({room.capacity}{" "}
-                {room.capacity > 1 ? "people" : "person"})
-              </div>
-              <div className="flex  items-center">
-                <Button
-                  color="secondary"
-                  className="px-1 py-1 h-6 w-6"
-                  onClick={() => console.log("change price")}
-                >
-                  -
-                </Button>
-                <span className="mx-2">${price}</span>
-                <Button
-                  color="secondary"
-                  className="px-1 py-1 h-6 w-6"
-                  onClick={() => console.log("change price")}
-                >
-                  +
-                </Button>
-              </div>
-            </li>
-          );
-        })}
+        {hotel.rooms.map((room) => (
+          <RoomListItem key={room.id} room={room} hotelId={hotel.id} />
+        ))}
       </ul>
     </div>
   );

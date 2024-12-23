@@ -6,6 +6,7 @@ import { organizationSlice } from "./organization/organization.slice";
 import { hotelApi } from "./hotel/hotel.api";
 import { hotelSlice } from "./hotel/hotel.slice";
 import { shiftApi } from "./shift/shift.api";
+import { roomApi } from "./room/room.api";
 
 export const store = configureStore({
   reducer: {
@@ -15,6 +16,7 @@ export const store = configureStore({
     organization: organizationSlice.reducer,
     [hotelApi.reducerPath]: hotelApi.reducer,
     hotel: hotelSlice.reducer,
+    [roomApi.reducerPath]: roomApi.reducer,
     [shiftApi.reducerPath]: shiftApi.reducer,
   },
   middleware: (getDefaultMiddleware) =>
@@ -22,6 +24,7 @@ export const store = configureStore({
       .concat(authApi.middleware)
       .concat(organizationApi.middleware)
       .concat(hotelApi.middleware)
+      .concat(roomApi.middleware)
       .concat(shiftApi.middleware),
 });
 

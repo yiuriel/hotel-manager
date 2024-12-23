@@ -1,8 +1,9 @@
-export class CreateRoomDto {
+export type Room = {
+  id: string;
   roomNumber: string;
   roomType: string;
   capacity: number;
-  pricePerNight: number;
+  pricePerNight: string;
   description: string;
   isAvailable: boolean;
-}
+};

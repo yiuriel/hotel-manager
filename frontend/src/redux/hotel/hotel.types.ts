@@ -1,3 +1,5 @@
+import { Room } from "../room/room.types";
+
 export type HotelStaff = {
   id: string;
   email: string;
@@ -9,16 +11,6 @@ export type StaffShift = {
   startTime: string;
   endTime: string;
   notes: string;
-};
-
-export type HotelRoom = {
-  id: string;
-  roomNumber: string;
-  roomType: string;
-  capacity: number;
-  pricePerNight: string;
-  description: string;
-  isAvailable: boolean;
 };
 
 export type HotelStaffWithShifts = HotelStaff & {
@@ -37,7 +29,7 @@ export type Hotel<T extends object = HotelStaff> = {
   email: string;
   staffCount: number;
   staff: T[];
-  rooms: HotelRoom[];
+  rooms: Room[];
   roomCount: number;
 };
 

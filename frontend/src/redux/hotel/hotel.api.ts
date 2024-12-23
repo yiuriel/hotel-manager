@@ -7,13 +7,14 @@ import {
 
 export const HOTELS_TAG = "HOTELS";
 export const HOTEL_TAG = "HOTEL";
+export const ALL_HOTEL_TAGS = [HOTELS_TAG, HOTEL_TAG];
 
 export const hotelApi = createApi({
   reducerPath: "hotelApi",
   baseQuery: fetchBaseQuery({
     baseUrl: `${import.meta.env.VITE_API_URL}/organization`,
   }),
-  tagTypes: [HOTELS_TAG, HOTEL_TAG],
+  tagTypes: ALL_HOTEL_TAGS,
   endpoints: (builder) => ({
     getHotels: builder.query<ManyHotelResponse, string>({
       query: (organizationId) => ({
@@ -21,6 +22,7 @@ export const hotelApi = createApi({
         method: "GET",
         credentials: "include",
       }),
+      providesTags: [HOTELS_TAG],
     }),
     getHotelById: builder.query<
       HotelResponse,
