@@ -7,7 +7,7 @@ export const CalendarWeekView: FC<{ shifts: StaffShift[]; date: Date }> = ({
   date,
 }) => {
   return (
-    <table className="w-full border-separate border-spacing-0 border border-purple-500">
+    <table className="w-full border-spacing-0 border border-purple-500">
       <thead>
         <tr>
           <th className="border border-purple-500"></th>
@@ -19,7 +19,7 @@ export const CalendarWeekView: FC<{ shifts: StaffShift[]; date: Date }> = ({
             );
             return (
               <th key={i} className="border border-purple-500">
-                <div className="flex flex-col">
+                <div className="flex flex-col text-sm font-medium">
                   <span>
                     {dateOfWeek.toLocaleString("default", { weekday: "short" })}
                   </span>
@@ -33,7 +33,7 @@ export const CalendarWeekView: FC<{ shifts: StaffShift[]; date: Date }> = ({
       <tbody>
         {Array.from({ length: 24 }).map((_, currentHour) => (
           <tr key={currentHour}>
-            <td className="border border-purple-500 text-center">
+            <td className="border border-purple-500 text-center text-sm">
               {currentHour === 0
                 ? `12 am`
                 : currentHour < 12
@@ -64,7 +64,7 @@ export const CalendarWeekView: FC<{ shifts: StaffShift[]; date: Date }> = ({
               return (
                 <td
                   key={currentDayOfWeek}
-                  className={`border border-purple-500 h-8 w-12 ${
+                  className={`border border-purple-500 w-12 ${
                     isToday ? "bg-yellow-500" : ""
                   } ${hasShift ? "bg-green-300 bg-opacity-50" : ""}`}
                 ></td>
