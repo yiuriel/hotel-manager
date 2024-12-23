@@ -1,5 +1,6 @@
 import { Exclude, Expose, Transform, Type } from 'class-transformer';
 import { OrganizationDto } from 'src/organization/dto/organization.dto';
+import { ShiftDto } from 'src/shift/dto/shift.dto';
 
 export class UserDto {
   @Expose()
@@ -7,6 +8,9 @@ export class UserDto {
 
   @Expose()
   email: string;
+
+  @Expose()
+  phone: string;
 
   @Expose()
   name: string;
@@ -20,6 +24,10 @@ export class UserDto {
   @Type(() => OrganizationDto)
   @Expose()
   organization: OrganizationDto;
+
+  @Type(() => ShiftDto)
+  @Expose()
+  shifts: ShiftDto[];
 
   @Exclude()
   password: string; // Exclude sensitive data

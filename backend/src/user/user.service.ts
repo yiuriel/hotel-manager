@@ -42,6 +42,7 @@ export class UserService {
         roles: {
           role: true,
         },
+        shifts: true,
       },
     });
   }
