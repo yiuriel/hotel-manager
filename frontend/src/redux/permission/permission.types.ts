@@ -1,5 +1,5 @@
 export type Permission = {
-  permission: string;
+  name: string;
   label: string;
   description: string;
 };
