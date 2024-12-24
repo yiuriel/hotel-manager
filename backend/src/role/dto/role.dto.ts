@@ -1,4 +1,5 @@
-import { Exclude, Expose } from 'class-transformer';
+import { Exclude, Expose, Type } from 'class-transformer';
+import { PermissionDto } from 'src/permission/dto/permission.dto';
 
 export class RoleDto {
   @Exclude()
@@ -6,4 +7,14 @@ export class RoleDto {
 
   @Expose()
   name: string;
+
+  @Expose()
+  description: string;
+
+  @Expose()
+  editable: boolean;
+
+  @Type(() => PermissionDto)
+  @Expose()
+  permissions: PermissionDto[];
 }

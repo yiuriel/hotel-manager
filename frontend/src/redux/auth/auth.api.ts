@@ -1,11 +1,13 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 
+export const VERIFY_TAG = "VERIFY";
+
 export const authApi = createApi({
   reducerPath: "authApi",
   baseQuery: fetchBaseQuery({
     baseUrl: `${import.meta.env.VITE_API_URL}/auth`,
   }),
-  tagTypes: ["VERIFY"],
+  tagTypes: [VERIFY_TAG],
   endpoints: (builder) => ({
     login: builder.mutation({
       query: (credentials) => ({
@@ -21,7 +23,8 @@ export const authApi = createApi({
         method: "POST",
         credentials: "include",
       }),
-      providesTags: ["VERIFY"],
+      keepUnusedDataFor: 0,
+      providesTags: [VERIFY_TAG],
     }),
     logout: builder.mutation({
       query: () => ({
@@ -29,6 +32,7 @@ export const authApi = createApi({
         method: "POST",
         credentials: "include",
       }),
+      invalidatesTags: [VERIFY_TAG],
     }),
     profile: builder.query({
       query: () => ({

@@ -7,6 +7,8 @@ import { hotelApi } from "./hotel/hotel.api";
 import { hotelSlice } from "./hotel/hotel.slice";
 import { shiftApi } from "./shift/shift.api";
 import { roomApi } from "./room/room.api";
+import { permissionApi } from "./permission/permission.api";
+import { userApi } from "./user/user.api";
 
 export const store = configureStore({
   reducer: {
@@ -18,6 +20,8 @@ export const store = configureStore({
     hotel: hotelSlice.reducer,
     [roomApi.reducerPath]: roomApi.reducer,
     [shiftApi.reducerPath]: shiftApi.reducer,
+    [permissionApi.reducerPath]: permissionApi.reducer,
+    [userApi.reducerPath]: userApi.reducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware()
@@ -25,7 +29,9 @@ export const store = configureStore({
       .concat(organizationApi.middleware)
       .concat(hotelApi.middleware)
       .concat(roomApi.middleware)
-      .concat(shiftApi.middleware),
+      .concat(shiftApi.middleware)
+      .concat(permissionApi.middleware)
+      .concat(userApi.middleware),
 });
 
 // Infer the `RootState` and `AppDispatch` types from the store itself

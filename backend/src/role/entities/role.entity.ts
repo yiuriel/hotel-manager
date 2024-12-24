@@ -1,8 +1,11 @@
 import { Organization } from 'src/organization/entities/organization.entity';
-import { UserHasRole } from 'src/user_roles/user_has_role.entity';
+import { Permission } from 'src/permission/entities/permission.entity';
+import { User } from 'src/user/entities/user.entity';
 import {
   Column,
   Entity,
+  JoinTable,
+  ManyToMany,
   ManyToOne,
   OneToMany,
   PrimaryGeneratedColumn,
@@ -22,11 +25,21 @@ export class Role {
   @Column({ unique: true })
   name: string;
 
+  @Column({ nullable: true })
+  description: string;
+
+  @Column({ default: false })
+  editable: boolean;
+
+  @OneToMany(() => User, (user) => user.role)
+  users: User[];
+
   @ManyToOne(() => Organization, (organization) => organization.roles, {
     onDelete: 'CASCADE',
   })
   organization: Organization;
 
-  @OneToMany(() => UserHasRole, (userHasRole) => userHasRole.role)
-  userRoles: UserHasRole[];
+  @ManyToMany(() => Permission, { eager: true })
+  @JoinTable()
+  permissions: Permission[]; // Permissions assigned to the role
 }

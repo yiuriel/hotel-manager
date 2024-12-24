@@ -1,22 +1,22 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { Hotel } from 'src/hotel/entities/hotel.entity';
+import { Organization } from 'src/organization/entities/organization.entity';
+import { Permission } from 'src/permission/entities/permission.entity';
+import { Role } from 'src/role/entities/role.entity';
+import { Room } from 'src/room/entities/room.entity';
+import { Shift } from 'src/shift/entities/shift.entity';
+import { User } from 'src/user/entities/user.entity';
 import { UserService } from 'src/user/user.service';
 import { SeedService } from './seed.service';
-import { User } from 'src/user/entities/user.entity';
-import { Organization } from 'src/organization/entities/organization.entity';
-import { Role } from 'src/role/entities/role.entity';
-import { UserHasRole } from 'src/user_roles/user_has_role.entity';
-import { Hotel } from 'src/hotel/entities/hotel.entity';
-import { Shift } from 'src/shift/entities/shift.entity';
-import { Room } from 'src/room/entities/room.entity';
 
 @Module({
   imports: [
     TypeOrmModule.forFeature([
       User,
       Organization,
+      Permission,
       Role,
-      UserHasRole,
       Hotel,
       Shift,
       Room,

@@ -1,16 +1,17 @@
 import { Amenity } from 'src/amenity/entities/amenity.entity';
 import { Hotel } from 'src/hotel/entities/hotel.entity';
 import { MaintenanceRequest } from 'src/maintenance_request/entities/maintenance_request.entity';
+import { Reservation } from 'src/reservation/entities/reservation.entity';
 import {
-  Entity,
-  PrimaryGeneratedColumn,
-  ManyToOne,
-  JoinColumn,
   Column,
   CreateDateColumn,
-  ManyToMany,
+  Entity,
+  JoinColumn,
   JoinTable,
+  ManyToMany,
+  ManyToOne,
   OneToMany,
+  PrimaryGeneratedColumn,
 } from 'typeorm';
 
 @Entity()
@@ -49,6 +50,9 @@ export class Room {
 
   @OneToMany(() => MaintenanceRequest, (request) => request.room)
   maintenanceRequests: MaintenanceRequest[]; // Maintenance requests associated with this room
+
+  @OneToMany(() => Reservation, (reservation) => reservation.room)
+  reservations: Reservation[]; // Reservations associated with this room
 
   @Column('text', { nullable: true })
   threeDSchema: string; // 3D schema for the room (compressed format)

@@ -1,7 +1,9 @@
 import { Body, Controller, Get, Param, Post, UseGuards } from '@nestjs/common';
 import { AuthGuard } from 'src/auth/auth.guard';
-import { HotelService } from './hotel.service';
+import { PermissionsGuard } from 'src/permission/permission.guard';
+import { Permissions } from '../permission/permission.decorator';
 import { CreateHotelDto } from './dto/create-hotel.dto';
+import { HotelService } from './hotel.service';
 
 @Controller('organization/:organizationId/hotel')
 export class HotelController {
@@ -13,8 +15,9 @@ export class HotelController {
     return this.hotelService.findHotelsByOrganizationId(organizationId);
   }
 
-  @UseGuards(AuthGuard)
   @Get(':hotelId')
+  @UseGuards(AuthGuard, PermissionsGuard)
+  @Permissions('create:hotel') // Require this permission
   async findOne(
     @Param('organizationId') organizationId: string,
     @Param('hotelId') hotelId: string,

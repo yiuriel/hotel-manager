@@ -3,16 +3,19 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Organization } from 'src/organization/entities/organization.entity';
 import { Role } from 'src/role/entities/role.entity';
 import { User } from 'src/user/entities/user.entity';
-import { UserHasRole } from 'src/user_roles/user_has_role.entity';
 import { Repository } from 'typeorm';
 import * as argon2 from 'argon2';
 import { Hotel } from 'src/hotel/entities/hotel.entity';
 import { Shift } from 'src/shift/entities/shift.entity';
 import { Room } from 'src/room/entities/room.entity';
+import { Permission } from 'src/permission/entities/permission.entity';
+import { PERMISSIONS } from 'src/permission/permission.constants';
 
 const userUUID = '5bb911b0-8396-4456-b55b-f931963ee3f0';
+const userMemberUUID = '5bb911b0-8396-4456-b55b-f931963ee3f7';
 const orgUUID = '5bb911b0-8396-4456-b55b-f931963ee3f1';
 const roleUUID = '5bb911b0-8396-4456-b55b-f931963ee3f2';
+const roleMemberUUID = '5bb911b0-8396-4456-b55b-f931963ee3f6';
 const hotelUUID = '5bb911b0-8396-4456-b55b-f931963ee3f3';
 const shiftUUID1 = '5bb911b0-8396-4456-b55b-f931963ee3f4';
 const shiftUUID2 = '5bb911b0-8396-4456-b55b-f931963ee3f5';
@@ -26,11 +29,11 @@ export class SeedService {
     @InjectRepository(Organization)
     private readonly organizationRepository: Repository<Organization>,
 
+    @InjectRepository(Permission)
+    private readonly permissionRepository: Repository<Permission>,
+
     @InjectRepository(Role)
     private readonly roleRepository: Repository<Role>,
-
-    @InjectRepository(UserHasRole)
-    private readonly userHasRoleRepository: Repository<UserHasRole>,
 
     @InjectRepository(Hotel)
     private readonly hotelRepository: Repository<Hotel>,
@@ -47,17 +50,39 @@ export class SeedService {
 
     await this.userRepository.delete({});
     await this.organizationRepository.delete({});
+    await this.permissionRepository.delete({});
     await this.roleRepository.delete({});
-    await this.userHasRoleRepository.delete({});
     await this.hotelRepository.delete({});
     await this.shiftRepository.delete({});
     await this.roomRepository.delete({});
 
     console.log('Seeding database...');
 
+    // Seed permissions
+    const dbPermissions: Permission[] = [];
+    for (const permission of Object.values(PERMISSIONS)) {
+      dbPermissions.push(
+        this.permissionRepository.create({
+          name: permission,
+        }),
+      );
+    }
+
+    await this.permissionRepository.save(dbPermissions);
+
     const role = this.roleRepository.create({
       id: roleUUID,
       name: 'admin',
+      editable: false,
+      permissions: dbPermissions,
+    });
+
+    const memberRole = this.roleRepository.create({
+      id: roleMemberUUID,
+      name: 'member',
+      description: 'Member role',
+      editable: true,
+      permissions: dbPermissions.filter((p) => p.name.includes('read')),
     });
 
     const hotel = this.hotelRepository.create({
@@ -86,6 +111,7 @@ export class SeedService {
       name: 'Example Organization',
     });
 
+    organization.roles = [role, memberRole];
     organization.hotels = [hotel, hotel2];
 
     await this.hotelRepository.save([hotel, hotel2]);
@@ -97,18 +123,22 @@ export class SeedService {
       passwordHash: await argon2.hash('password'),
       name: 'John Doe',
       phone: '123-456-7890',
+      role: role,
     });
 
     const user2 = this.userRepository.create({
+      id: userMemberUUID,
       email: 'member@example.com',
       name: 'Jane Doe',
       passwordHash: await argon2.hash('password'),
+      role: memberRole,
+      permissions: [dbPermissions.find((p) => p.name === 'create:hotel')!],
     });
 
     organization.owner = user1;
     organization.users = [user1, user2];
 
-    await this.roleRepository.save(role);
+    await this.roleRepository.save([role, memberRole]);
     await this.userRepository.save([user1, user2]);
     await this.organizationRepository.save(organization);
 
@@ -170,14 +200,6 @@ export class SeedService {
     shift2.users = [user2];
     shift3.users = [user1];
     await this.shiftRepository.save([shift1, shift2, shift3]);
-
-    console.log('Saving user roles...');
-
-    await this.userHasRoleRepository.save({
-      user: user1,
-      role,
-      organization,
-    });
 
     console.log('Database seeding complete.');
   }

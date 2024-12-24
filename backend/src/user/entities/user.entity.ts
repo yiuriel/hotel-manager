@@ -1,8 +1,9 @@
 import { Hotel } from 'src/hotel/entities/hotel.entity';
 import { MaintenanceRequest } from 'src/maintenance_request/entities/maintenance_request.entity';
 import { Organization } from 'src/organization/entities/organization.entity';
+import { Permission } from 'src/permission/entities/permission.entity';
+import { Role } from 'src/role/entities/role.entity';
 import { Shift } from 'src/shift/entities/shift.entity';
-import { UserHasRole } from 'src/user_roles/user_has_role.entity';
 import {
   Column,
   CreateDateColumn,
@@ -51,8 +52,12 @@ export class User {
   )
   maintenanceRequests: MaintenanceRequest[];
 
-  @OneToMany(() => UserHasRole, (userHasRole) => userHasRole.user)
-  roles: UserHasRole[];
+  @ManyToOne(() => Role, (role) => role.users)
+  role: Role;
+
+  @ManyToMany(() => Permission)
+  @JoinTable()
+  permissions: Permission[];
 
   @ManyToOne(() => Organization, (organization) => organization.users)
   organization: Organization;

@@ -1,37 +1,51 @@
-import { Injectable } from '@nestjs/common';
-import { CreateRoleDto } from './dto/create-role.dto';
-import { UpdateRoleDto } from './dto/update-role.dto';
+import { Injectable, NotFoundException } from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Permission } from 'src/permission/entities/permission.entity';
 import { Repository } from 'typeorm';
 import { Role } from './entities/role.entity';
-import { InjectRepository } from '@nestjs/typeorm';
 
 @Injectable()
 export class RoleService {
   constructor(
     @InjectRepository(Role)
     private readonly roleRepository: Repository<Role>,
+
+    @InjectRepository(Permission)
+    private readonly permissionRepository: Repository<Permission>,
   ) {}
-  create(createRoleDto: CreateRoleDto) {
-    return this.roleRepository.save(createRoleDto);
+
+  async assignPermissionsToRole(roleId: string, permissionIds: string[]) {
+    const role = await this.roleRepository.findOne({
+      where: { id: roleId },
+      relations: ['permissions'],
+    });
+
+    if (!role) throw new NotFoundException('Role not found');
+    if (!role.editable) throw new NotFoundException('Role is not editable');
+
+    const permissions =
+      await this.permissionRepository.findByIds(permissionIds);
+
+    role.permissions = [...role.permissions, ...permissions];
+    return this.roleRepository.save(role);
   }
 
-  findAll() {
-    return `This action returns all role`;
-  }
+  async removePermissionsFromRole(roleId: string, permissionIds: string[]) {
+    const role = await this.roleRepository.findOne({
+      where: { id: roleId },
+      relations: ['permissions'],
+    });
 
-  findOne(id: number) {
-    return `This action returns a #${id} role`;
-  }
+    if (!role) throw new NotFoundException('Role not found');
+    if (!role.editable) throw new NotFoundException('Role is not editable');
 
-  update(id: number, updateRoleDto: UpdateRoleDto) {
-    return `This action updates a #${id} role`;
-  }
-
-  remove(id: number) {
-    return `This action removes a #${id} role`;
+    role.permissions = role.permissions.filter(
+      (perm) => !permissionIds.includes(perm.id),
+    );
+    return this.roleRepository.save(role);
   }
 
   async clearAll() {
-    return this.roleRepository.remove(await this.roleRepository.find());
+    return this.roleRepository.delete({});
   }
 }

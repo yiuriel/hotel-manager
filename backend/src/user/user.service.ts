@@ -3,6 +3,8 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { CreateUserDto } from './dto/create-user.dto';
 import { User } from './entities/user.entity';
+import { plainToInstance } from 'class-transformer';
+import { UserDto } from './dto/user.dto';
 
 @Injectable()
 export class UserService {
@@ -15,20 +17,17 @@ export class UserService {
     return this.userRepository.save(createUserDto);
   }
 
-  findAll() {
-    return this.userRepository.find();
-  }
-
-  findOne(id: number) {
-    return `This action returns a #${id} user`;
-  }
-
-  update(id: number) {
-    return `This action updates a #${id} user`;
-  }
-
-  remove(id: number) {
-    return `This action removes a #${id} user`;
+  getAllOrgUsers(organizationId: string) {
+    return plainToInstance(
+      UserDto,
+      this.userRepository.find({
+        where: { organization: { id: organizationId } },
+        relations: { role: { permissions: true }, permissions: true },
+      }),
+      {
+        excludeExtraneousValues: true,
+      },
+    );
   }
 
   async findByEmail(email: string) {
@@ -36,15 +35,22 @@ export class UserService {
   }
 
   async findById(id: string) {
-    return this.userRepository.findOne({
-      where: { id },
-      relations: {
-        roles: {
-          role: true,
+    return plainToInstance(
+      UserDto,
+      this.userRepository.findOne({
+        where: { id },
+        relations: {
+          role: {
+            permissions: true,
+          },
+          shifts: true,
+          permissions: true,
         },
-        shifts: true,
+      }),
+      {
+        excludeExtraneousValues: true,
       },
-    });
+    );
   }
 
   async createUser(email: string, passwordHash: string) {

@@ -1,10 +1,8 @@
 import { Injectable, Res, UnauthorizedException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import * as argon2 from 'argon2';
-import { plainToInstance } from 'class-transformer';
 import { Response } from 'express';
 import { jwtConstants } from 'src/config/jwt.config';
-import { UserDto } from 'src/user/dto/user.dto';
 import { User } from 'src/user/entities/user.entity';
 import { noop } from 'src/utils/noop';
 import { UserService } from '../user/user.service';
@@ -77,12 +75,6 @@ export class AuthService {
   }
 
   async getProfile(id: string) {
-    const dbUser = await this.userService.findById(id);
-
-    const userDto = plainToInstance(UserDto, dbUser, {
-      excludeExtraneousValues: true,
-    });
-
-    return userDto;
+    return this.userService.findById(id);
   }
 }

@@ -12,7 +12,7 @@ import {
 @Entity()
 export class MaintenanceRequest {
   @PrimaryGeneratedColumn('uuid')
-  requestId: string; // Unique identifier for each request
+  id: string; // Unique identifier for each request
 
   @ManyToOne(() => Room, (room) => room.maintenanceRequests, {
     onDelete: 'CASCADE',

@@ -21,6 +21,7 @@ import { SeedService } from './seed/seed.service';
 import { SeedModule } from './seed/seed.module';
 import { UserService } from './user/user.service';
 import { RoleService } from './role/role.service';
+import { PermissionModule } from './permission/permission.module';
 
 @Module({
   imports: [
@@ -53,6 +54,7 @@ import { RoleService } from './role/role.service';
     RoleModule,
     AuthModule,
     SeedModule,
+    PermissionModule,
   ],
   controllers: [AppController],
   providers: [AppService, UserService, RoleService, SeedService],

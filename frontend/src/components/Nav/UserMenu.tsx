@@ -1,10 +1,11 @@
-import { Link, useNavigate } from "react-router";
-import { ProfileIcon } from "../Icons/ProfileIcon";
-import { Menu } from "../Menu/Menu";
 import { useState } from "react";
-import { MenuItem } from "../Menu/MenuItem";
+import { Link, useNavigate } from "react-router";
 import { useLogoutMutation } from "../../redux/auth/auth.api";
 import { HoverableIcon } from "../Icons/HoverableIcon";
+import { ProfileIcon } from "../Icons/ProfileIcon";
+import { Menu } from "../Menu/Menu";
+import { MenuItem } from "../Menu/MenuItem";
+import { PermissionsButton } from "./PermissionsButton";
 
 export const UserMenu = () => {
   const [logout] = useLogoutMutation();
@@ -14,6 +15,7 @@ export const UserMenu = () => {
 
   return (
     <>
+      <PermissionsButton />
       <div
         className="cursor-pointer"
         onClick={(e) => {

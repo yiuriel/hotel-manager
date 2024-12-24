@@ -10,7 +10,7 @@ export const useAppStartup = () => {
       error: userError,
       isUninitialized: userUninitialized,
     },
-  ] = useLazyVerifyQuery(undefined);
+  ] = useLazyVerifyQuery();
   const [
     fetchorganization,
     {
@@ -18,12 +18,12 @@ export const useAppStartup = () => {
       error: organizationError,
       isUninitialized: organizationUninitialized,
     },
-  ] = useLazyGetOrganizationQuery(undefined);
+  ] = useLazyGetOrganizationQuery();
 
   useEffect(() => {
     const startUpApp = async () => {
-      await Promise.allSettled([
-        fetchAuthUser(undefined),
+      await Promise.all([
+        fetchAuthUser("login", false),
         fetchorganization(undefined),
       ]);
     };
