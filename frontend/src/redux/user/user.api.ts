@@ -19,16 +19,36 @@ export const userApi = createApi({
       providesTags: (result) =>
         result ? result.map(({ id }) => ({ type: USER_TAG, id })) : [],
     }),
-    updateUser: builder.mutation<User, Partial<User> & { id: string }>({
-      query: ({ id, ...patch }) => ({
-        url: `/${id}`,
+    updateUser: builder.mutation<
+      User,
+      Partial<User> & { organizationId: string; id: string }
+    >({
+      query: ({ id, organizationId, ...patch }) => ({
+        url: `/${organizationId}/user/${id}`,
         method: "PATCH",
-        body: patch,
+        credentials: "include",
+        body: { ...patch, id },
+      }),
+      invalidatesTags: (_, __, { id }) => [{ type: USER_TAG, id }],
+    }),
+    updateUserPermission: builder.mutation<
+      User,
+      { permissions: string[] } & { organizationId: string; id: string }
+    >({
+      query: ({ id, organizationId, ...permissions }) => ({
+        url: `/${organizationId}/user/${id}/permission`,
+        method: "PATCH",
+        credentials: "include",
+        body: { permissions: permissions.permissions },
       }),
       invalidatesTags: (_, __, { id }) => [{ type: USER_TAG, id }],
     }),
   }),
 });
 
-export const { useGetUsersQuery, useLazyGetUsersQuery, useUpdateUserMutation } =
-  userApi;
+export const {
+  useGetUsersQuery,
+  useLazyGetUsersQuery,
+  useUpdateUserMutation,
+  useUpdateUserPermissionMutation,
+} = userApi;

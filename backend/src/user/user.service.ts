@@ -1,16 +1,20 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
-import { CreateUserDto } from './dto/create-user.dto';
-import { User } from './entities/user.entity';
 import { plainToInstance } from 'class-transformer';
+import { Permission } from 'src/permission/entities/permission.entity';
+import { In, Repository } from 'typeorm';
+import { CreateUserDto } from './dto/create-user.dto';
 import { UserDto } from './dto/user.dto';
+import { User } from './entities/user.entity';
 
 @Injectable()
 export class UserService {
   constructor(
     @InjectRepository(User)
     private readonly userRepository: Repository<User>,
+
+    @InjectRepository(Permission)
+    private readonly permissionRepository: Repository<Permission>,
   ) {}
 
   create(createUserDto: CreateUserDto) {
@@ -51,6 +55,31 @@ export class UserService {
         excludeExtraneousValues: true,
       },
     );
+  }
+
+  async updateUserPermissions(
+    organizationId: string,
+    userId: string,
+    permissions: string[],
+  ) {
+    const dbUser = await this.userRepository.findOne({
+      where: { id: userId, organization: { id: organizationId } },
+      relations: ['permissions'],
+      select: { id: true, permissions: { id: true, name: true } },
+    });
+
+    if (!dbUser) {
+      throw new NotFoundException('User not found');
+    }
+
+    const dbPermissions = await this.permissionRepository.findBy({
+      name: In(permissions),
+    });
+
+    dbUser.permissions = dbPermissions;
+    await this.userRepository.save(dbUser, { reload: false });
+
+    return { ok: true, message: 'Permissions updated successfully' };
   }
 
   async createUser(email: string, passwordHash: string) {

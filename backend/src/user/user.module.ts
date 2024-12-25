@@ -8,6 +8,7 @@ import { Shift } from 'src/shift/entities/shift.entity';
 import { User } from './entities/user.entity';
 import { UserController } from './user.controller';
 import { UserService } from './user.service';
+import { Permission } from 'src/permission/entities/permission.entity';
 
 @Module({
   imports: [
@@ -17,6 +18,7 @@ import { UserService } from './user.service';
       MaintenanceRequest,
       Hotel,
       Organization,
+      Permission,
     ]),
   ],
   controllers: [UserController],
