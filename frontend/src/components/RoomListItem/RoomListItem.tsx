@@ -34,8 +34,10 @@ export const RoomListItem: FC<{ room: Room; hotelId: string }> = ({
       key={room.id}
       className="flex justify-between p-2 border-t hover:bg-purple-100 cursor-pointer"
     >
-      {room.roomNumber} - {room.roomType}{" "}
-      <div>
+      <span className="truncate">
+        {room.roomNumber} - {room.roomType}{" "}
+      </span>
+      <div className="truncate">
         capacity: ({room.capacity} {room.capacity > 1 ? "people" : "person"})
       </div>
       <div className="flex  items-center">
@@ -50,7 +52,7 @@ export const RoomListItem: FC<{ room: Room; hotelId: string }> = ({
         </Button>
         <Input
           type="text"
-          className="w-16 mx-2"
+          className="w-20 mx-2"
           value={roomPrice}
           onChange={(e) => setRoomPrice(e.target.value)}
           onBlur={(e) => {

@@ -12,16 +12,19 @@ export class RoomService {
     private readonly roomRepository: Repository<Room>,
   ) {}
 
-  create(createRoomDto: CreateRoomDto) {
+  create(createRoomDto: CreateRoomDto, hotelId: string) {
     try {
-      return this.roomRepository.save(createRoomDto);
+      return this.roomRepository.save({
+        ...createRoomDto,
+        hotel: { id: hotelId },
+      });
     } catch (error) {
       return error;
     }
   }
 
-  findAll() {
-    return `This action returns all room`;
+  findAll(hotelId: string) {
+    return this.roomRepository.find({ where: { hotel: { id: hotelId } } });
   }
 
   findOne(id: string, hotelId: string) {

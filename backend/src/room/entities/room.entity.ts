@@ -23,7 +23,7 @@ export class Room {
   @JoinColumn({ name: 'hotel_id' })
   hotel: Hotel; // Hotel this room belongs to
 
-  @Column({ length: 10 })
+  @Column({ length: 20 })
   roomNumber: string; // Room number (e.g., 101, A1)
 
   @Column({ length: 50 })

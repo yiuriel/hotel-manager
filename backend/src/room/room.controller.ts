@@ -16,13 +16,16 @@ export class RoomController {
   constructor(private readonly roomService: RoomService) {}
 
   @Post()
-  create(@Body() createRoomDto: CreateRoomDto) {
-    return this.roomService.create(createRoomDto);
+  create(
+    @Param('hotelId') hotelId: string,
+    @Body() createRoomDto: CreateRoomDto,
+  ) {
+    return this.roomService.create(createRoomDto, hotelId);
   }
 
   @Get()
-  findAll() {
-    return this.roomService.findAll();
+  findAll(@Param('hotelId') hotelId: string) {
+    return this.roomService.findAll(hotelId);
   }
 
   @Get(':id')

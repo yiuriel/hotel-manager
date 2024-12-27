@@ -4,6 +4,7 @@ export const Button = ({
   color = "primary",
   fullWidth = false,
   size = "md",
+  disabled,
   ...props
 }: {
   className?: string;
@@ -11,6 +12,7 @@ export const Button = ({
   color?: "primary" | "secondary" | "submit";
   fullWidth?: boolean;
   size?: "sm" | "md" | "lg";
+  disabled?: boolean;
 } & React.ComponentProps<"button">) => {
   const baseClasses =
     "rounded-md shadow-sm font-medium transition duration-150 ease-in-out flex items-center justify-center";
@@ -42,10 +44,16 @@ export const Button = ({
 
   const colorClasses = getColorClasses(color, variant);
 
-  return (
-    <button
-      className={`${baseClasses} ${fullWidthClass} ${sizeClasses} ${colorClasses} ${className}`}
-      {...props}
-    />
-  );
+  const disabledClasses =
+    disabled && variant === "contained"
+      ? "bg-gray-200 text-gray-800 cursor-not-allowed"
+      : disabled && variant === "outlined"
+      ? "border border-gray-200 text-gray-800 cursor-not-allowed"
+      : "";
+
+  const finalClasses = `${baseClasses} ${fullWidthClass} ${sizeClasses} ${
+    disabled ? "bg-gray-200" : colorClasses
+  } ${disabledClasses} ${className}`;
+
+  return <button className={finalClasses} disabled={disabled} {...props} />;
 };
