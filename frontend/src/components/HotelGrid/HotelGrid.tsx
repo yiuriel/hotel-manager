@@ -28,44 +28,54 @@ export const HotelGrid = () => {
   }
 
   return (
-    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 p-4">
+    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 p-6">
       {data.map((hotel) => (
         <div
           key={hotel.id}
-          className="text-3xl shadow-md hover:shadow-xl rounded-md flex flex-col items-center justify-center overflow-hidden"
+          className="bg-white rounded-lg shadow-lg hover:shadow-xl transition-shadow duration-300 overflow-hidden border border-gray-100"
         >
-          <div className="text-purple-600 mb-4">{hotel.name}</div>
-          <div className="flex text-base justify-around border-t w-full p-2">
-            <span className="flex gap-2 items-center">
-              rooms: {hotel.roomCount}{" "}
-              <HoverableIcon
-                onClick={() => {
-                  console.log("add room");
-                }}
-              >
-                <PlusCircleIcon />
-              </HoverableIcon>
-            </span>
-            <span className="flex gap-2 items-center">
-              staff: {hotel.staffCount}{" "}
-              <HoverableIcon
-                onClick={() => {
-                  console.log("add staff");
-                }}
-              >
-                <PlusCircleIcon />
-              </HoverableIcon>
-            </span>
+          <div className="p-6">
+            <h3 className="text-2xl font-semibold text-purple-600 mb-4 text-center">{hotel.name}</h3>
+            <div className="space-y-4 border-t border-gray-100 pt-4">
+              <div className="flex justify-between items-center px-2">
+                <span className="text-gray-600 font-medium">Rooms</span>
+                <div className="flex items-center gap-2">
+                  <span className="text-lg font-semibold text-gray-800">{hotel.roomCount}</span>
+                  <HoverableIcon
+                    onClick={() => {
+                      console.log("add room");
+                    }}
+                    className="text-purple-500 hover:text-purple-600"
+                  >
+                    <PlusCircleIcon />
+                  </HoverableIcon>
+                </div>
+              </div>
+              <div className="flex justify-between items-center px-2">
+                <span className="text-gray-600 font-medium">Staff</span>
+                <div className="flex items-center gap-2">
+                  <span className="text-lg font-semibold text-gray-800">{hotel.staffCount}</span>
+                  <HoverableIcon
+                    onClick={() => {
+                      console.log("add staff");
+                    }}
+                    className="text-purple-500 hover:text-purple-600"
+                  >
+                    <PlusCircleIcon />
+                  </HoverableIcon>
+                </div>
+              </div>
+            </div>
           </div>
-          <div className="flex justify-center w-full">
+          <div className="mt-4">
             <Button
               onClick={() => {
                 navigate(`/app/hotel/${hotel.id}/edit`);
               }}
               fullWidth
-              className="rounded-none"
+              className="py-3 bg-purple-600 hover:bg-purple-700 text-white font-medium transition-colors duration-200"
             >
-              Edit
+              Edit Hotel
             </Button>
           </div>
         </div>

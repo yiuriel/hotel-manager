@@ -58,60 +58,72 @@ export const StaffShiftsCalendar = () => {
   };
 
   return (
-    <div className="flex flex-col shadow-md rounded-sm">
-      <Button
-        onClick={() => setView(view === "month" ? "week" : "month")}
-        className="h-6 !rounded-none"
-        color="secondary"
-        fullWidth
-      >
-        {view === "month" ? "Week" : "Month"}
-      </Button>
-      <div className="flex justify-between">
+    <div className="flex flex-col bg-white rounded-lg shadow-lg overflow-hidden">
+      <div className="border-b border-gray-200">
         <Button
-          onClick={previousMonth}
-          className="w-10 h-10 !rounded-none text-white"
+          onClick={() => setView(view === "month" ? "week" : "month")}
+          className="h-8 !rounded-none font-medium text-sm"
+          color="secondary"
+          fullWidth
         >
-          &lt;
-        </Button>
-        <div className="flex-1 flex-nowrap flex text-center justify-center items-center">
-          {view === "month" ? (
-            <div>
-              {date.toLocaleString("default", { month: "long" })}{" "}
-              {date.getFullYear()}
-              {date.getMonth() !== new Date().getMonth() && (
-                <small
-                  onClick={handleTodayButtonClick}
-                  className="cursor-pointer bg-yellow-200 px-2 py-1 rounded-sm ml-2"
-                >
-                  jump to Today
-                </small>
-              )}
-            </div>
-          ) : (
-            <div>
-              Week {Math.ceil(date.getDate() / 7)} of{" "}
-              {date.toLocaleString("default", { month: "long" })}{" "}
-              {date.getFullYear()}
-            </div>
-          )}
-        </div>
-        <Button
-          onClick={nextMonth}
-          className="w-10 h-10 !rounded-none text-white"
-        >
-          &gt;
+          {view === "month" ? "Switch to Week View" : "Switch to Month View"}
         </Button>
       </div>
-      {view === "month" ? (
-        <CalendarMonthView
-          shifts={shifts}
-          date={date}
-          onDayClick={onDayClick}
-        />
-      ) : (
-        <CalendarWeekView shifts={shifts} date={date} />
-      )}
+      
+      <div className="flex items-center justify-between p-4 border-b border-gray-200">
+        <Button
+          onClick={previousMonth}
+          className="w-8 h-8 !rounded-full hover:bg-gray-100 flex items-center justify-center"
+        >
+          <span className="sr-only">Previous {view}</span>
+          <span aria-hidden="true">&lt;</span>
+        </Button>
+        
+        <div className="flex-1 text-center">
+          <h2 className="text-lg font-semibold text-gray-900">
+            {view === "month" ? (
+              <span>
+                {date.toLocaleString("default", { month: "long" })}{" "}
+                {date.getFullYear()}
+                {date.getMonth() !== new Date().getMonth() && (
+                  <button
+                    onClick={handleTodayButtonClick}
+                    className="ml-2 text-sm px-2 py-1 bg-yellow-100 hover:bg-yellow-200 text-yellow-800 rounded-full transition-colors duration-150 ease-in-out"
+                  >
+                    Today
+                  </button>
+                )}
+              </span>
+            ) : (
+              <span>
+                Week {Math.ceil(date.getDate() / 7)} of{" "}
+                {date.toLocaleString("default", { month: "long" })}{" "}
+                {date.getFullYear()}
+              </span>
+            )}
+          </h2>
+        </div>
+        
+        <Button
+          onClick={nextMonth}
+          className="w-8 h-8 !rounded-full hover:bg-gray-100 flex items-center justify-center"
+        >
+          <span className="sr-only">Next {view}</span>
+          <span aria-hidden="true">&gt;</span>
+        </Button>
+      </div>
+
+      <div className="p-4">
+        {view === "month" ? (
+          <CalendarMonthView
+            shifts={shifts}
+            date={date}
+            onDayClick={onDayClick}
+          />
+        ) : (
+          <CalendarWeekView shifts={shifts} date={date} />
+        )}
+      </div>
     </div>
   );
 };

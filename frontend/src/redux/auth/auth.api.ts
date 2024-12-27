@@ -1,4 +1,5 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
+import { User } from "../user/user.types";
 
 export const VERIFY_TAG = "VERIFY";
 
@@ -34,12 +35,13 @@ export const authApi = createApi({
       }),
       invalidatesTags: [VERIFY_TAG],
     }),
-    profile: builder.query({
+    profile: builder.query<User, void>({
       query: () => ({
         url: "profile",
         method: "GET",
         credentials: "include",
       }),
+      keepUnusedDataFor: 0,
     }),
   }),
 });

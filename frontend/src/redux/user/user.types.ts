@@ -14,4 +14,10 @@ export type User = {
   permissions: {
     name: string;
   }[];
+  shifts: {
+    id: string;
+    startTime: string;
+    endTime: string;
+    notes: string;
+  }[];
 };

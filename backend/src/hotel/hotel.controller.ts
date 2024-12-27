@@ -28,8 +28,9 @@ export class HotelController {
     );
   }
 
-  @UseGuards(AuthGuard)
   @Post()
+  @UseGuards(AuthGuard, PermissionsGuard)
+  @Permissions('create:hotel')
   async addNewHotel(
     @Param('organizationId') organizationId: string,
     @Body() hotel: CreateHotelDto,

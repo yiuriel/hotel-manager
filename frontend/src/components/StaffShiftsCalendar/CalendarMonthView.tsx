@@ -8,41 +8,61 @@ export const CalendarMonthView: FC<{
   onDayClick: (date: Date) => void;
 }> = ({ date, shifts, onDayClick }) => {
   return (
-    <div className="grid grid-cols-7 gap-2 place-items-center">
-      {["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"].map((day) => (
-        <div
-          key={day}
-          className="text-center w-10 h-10 flex items-center justify-center"
-        >
-          {day}
-        </div>
-      ))}
-      {Array.from({ length: 42 }).map((_, i) => {
-        const dateNumber = new Date(
-          date.getFullYear(),
-          date.getMonth(),
-          i - (new Date(date.getFullYear(), date.getMonth()).getDay() - 1)
-        );
-        const isToday = dateNumber.toDateString() === new Date().toDateString();
-        const hasShift =
-          shifts.some(shiftIsWithinDay(dateNumber)) ||
-          isShiftDay(dateNumber, shifts);
-        const isSameMonth = dateNumber.getMonth() === date.getMonth();
-
-        return (
+    <div className="select-none">
+      <div className="grid grid-cols-7 mb-2">
+        {["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"].map((day) => (
           <div
-            key={i}
-            className={`${isToday ? "bg-yellow-500 bg-opacity-80" : ""} ${
-              hasShift ? "bg-green-300 bg-opacity-50" : ""
-            } ${isToday && hasShift ? "bg-lime-400 bg-opacity-65" : ""} ${
-              isSameMonth ? "" : "text-gray-400"
-            } text-center w-10 h-10 flex items-center justify-center rounded-md cursor-pointer hover:bg-blue-500 hover:text-white`}
-            onClick={() => onDayClick(dateNumber)}
+            key={day}
+            className="text-center py-2 text-sm font-semibold text-gray-600"
           >
-            {dateNumber.getDate()}
+            {day}
           </div>
-        );
-      })}
+        ))}
+      </div>
+      <div className="grid grid-cols-7 gap-1">
+        {Array.from({ length: 42 }).map((_, i) => {
+          const dateNumber = new Date(
+            date.getFullYear(),
+            date.getMonth(),
+            i - (new Date(date.getFullYear(), date.getMonth()).getDay() - 1)
+          );
+          const isToday = dateNumber.toDateString() === new Date().toDateString();
+          const hasShift =
+            shifts.some(shiftIsWithinDay(dateNumber)) ||
+            isShiftDay(dateNumber, shifts);
+          const isSameMonth = dateNumber.getMonth() === date.getMonth();
+
+          return (
+            <div
+              key={i}
+              className={`
+                relative aspect-square flex items-center justify-center
+                text-sm font-medium rounded-md transition-all duration-150
+                ${isToday ? "bg-yellow-100" : ""}
+                ${hasShift ? "bg-green-100" : ""}
+                ${isToday && hasShift ? "bg-lime-200" : ""}
+                ${isSameMonth ? "text-gray-900" : "text-gray-400"}
+                ${
+                  isSameMonth
+                    ? "hover:bg-blue-50 hover:text-blue-600 hover:shadow-sm"
+                    : "hover:text-gray-600"
+                }
+                cursor-pointer
+              `}
+              onClick={() => onDayClick(dateNumber)}
+            >
+              <span className={`
+                ${isToday ? "w-7 h-7 flex items-center justify-center rounded-full bg-yellow-400 text-yellow-900" : ""}
+              `}>
+                {dateNumber.getDate()}
+              </span>
+              {hasShift && (
+                <span className="absolute bottom-1 left-1/2 transform -translate-x-1/2 w-1 h-1 rounded-full bg-green-500"></span>
+              )}
+            </div>
+          );
+        })}
+      </div>
     </div>
   );
 };

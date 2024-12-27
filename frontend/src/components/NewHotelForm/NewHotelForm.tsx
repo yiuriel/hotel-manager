@@ -46,37 +46,67 @@ export const NewHotelForm = () => {
   };
 
   return (
-    <>
-      <form onSubmit={handleSubmit}>
-        <div className="grid grid-cols-2 gap-4">
-          {Object.keys(formData).map((key) => (
-            <div key={key}>
+    <div className="max-w-4xl mx-auto bg-white p-8 rounded-lg shadow-lg">
+      <div className="mb-8">
+        <h2 className="text-2xl font-bold text-gray-900">Add New Hotel</h2>
+        <p className="mt-2 text-sm text-gray-600">
+          Please fill in the hotel details below. Fields marked with an asterisk
+          (*) are required.
+        </p>
+      </div>
+
+      <form onSubmit={handleSubmit} className="space-y-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          {Object.entries(formData).map(([key, value]) => (
+            <div key={key} className={key === "address" ? "md:col-span-2" : ""}>
               <label className="block text-sm font-medium text-gray-700">
                 {key.charAt(0).toUpperCase() + key.slice(1)}
                 {!(key === "email" || key === "country") && (
-                  <span className="text-red-600">*</span>
+                  <span className="text-red-500">*</span>
                 )}
               </label>
               <Input
-                type="text"
+                type={key === "email" ? "email" : "text"}
                 name={key}
-                value={formData[key as keyof typeof formData]}
+                value={value}
                 onChange={handleChange}
                 required={!(key === "email" || key === "country")}
-                className={`mt-1 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md`}
+                className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
               />
             </div>
           ))}
         </div>
-        <div className="w-full mt-4 flex justify-between">
-          <div className="text-sm text-gray-700 mt-2">
-            <span className="text-red-500">*</span> Required fields
+
+        <div className="pt-6 border-t border-gray-200">
+          <div className="flex items-center justify-between">
+            <div className="text-sm text-gray-600">
+              <span className="text-red-500">*</span> Required fields
+            </div>
+            <div className="flex items-center space-x-4">
+              <Button type="button" onClick={() => navigate("/app")}>
+                Cancel
+              </Button>
+              <Button
+                type="submit"
+                color="secondary"
+                disabled={isLoading}
+                className="relative min-w-[100px]"
+              >
+                {isLoading ? (
+                  <>
+                    <span className="opacity-0">Add Hotel</span>
+                    <div className="absolute inset-0 flex items-center justify-center">
+                      <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+                    </div>
+                  </>
+                ) : (
+                  "Add Hotel"
+                )}
+              </Button>
+            </div>
           </div>
-          <Button type="submit" color="secondary" disabled={isLoading}>
-            Add Hotel
-          </Button>
         </div>
       </form>
-    </>
+    </div>
   );
 };

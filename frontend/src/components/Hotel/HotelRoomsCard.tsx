@@ -10,15 +10,25 @@ export const HotelRoomsCard = () => {
   }
 
   return (
-    <div className="bg-white rounded-sm shadow-md">
-      <h2 className="text-2xl mb-2 flex justify-between p-4">
-        Rooms <Button size="sm">add room</Button>
-      </h2>
-      <ul className="flex flex-col">
+    <div className="bg-white rounded-lg shadow-lg overflow-hidden">
+      <div className="px-6 py-4 border-b border-gray-200 flex items-center justify-between">
+        <h2 className="text-2xl font-semibold text-gray-900">Rooms</h2>
+        <Button size="sm" variant="contained">
+          Add Room
+        </Button>
+      </div>
+      <div className="divide-y divide-gray-200">
         {hotel.rooms.map((room) => (
-          <RoomListItem key={room.id} room={room} hotelId={hotel.id} />
+          <div key={room.id} className="hover:bg-gray-50">
+            <RoomListItem room={room} hotelId={hotel.id} />
+          </div>
         ))}
-      </ul>
+      </div>
+      <div className="px-6 py-4">
+        <Button size="sm" variant="outlined" fullWidth>
+          View All Rooms
+        </Button>
+      </div>
     </div>
   );
 };

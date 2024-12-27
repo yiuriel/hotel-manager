@@ -1,3 +1,11 @@
-export const Label = ({ children }: { children: React.ReactNode }) => {
-  return <label className="text-sm font-light">{children}</label>;
+export const Label = ({
+  children,
+  className = "",
+}: {
+  children: React.ReactNode;
+  className?: string;
+}) => {
+  return (
+    <label className={`text-sm font-light ${className}`}>{children}</label>
+  );
 };

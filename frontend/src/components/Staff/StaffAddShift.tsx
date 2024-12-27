@@ -49,14 +49,15 @@ export const StaffAddShift: FC<{
   return (
     <>
       <Button
-        className="!bg-blue-500 hover:!bg-blue-600 text-white !py-1 !text-xs !px-2 rounded-sm"
+        size="sm"
+        variant="contained"
         onClick={(e) => {
           e.stopPropagation();
           e.preventDefault();
           setOpen(true);
         }}
       >
-        Add Shifts
+        Add Shift
       </Button>
       <Dialog
         open={open}
@@ -65,51 +66,70 @@ export const StaffAddShift: FC<{
           setOpen(false);
         }}
       >
-        <div className="flex flex-col gap-2">
-          <div className="flex items-center justify-center gap-2">
-            <label className="w-1/3 text-sm" htmlFor="startTime">
-              Start Time
-            </label>
-            <Input
-              id="startTime"
-              type="datetime-local"
-              value={startTime}
-              onChange={(e) => setStartTime(e.target.value)}
-              className="border flex-1 border-gray-300 rounded-sm p-2"
-            />
+        <div className="space-y-4 py-4">
+          <div className="space-y-4">
+            <div className="flex flex-col gap-1.5">
+              <label
+                className="text-sm font-medium text-gray-700"
+                htmlFor="startTime"
+              >
+                Start Time
+              </label>
+              <Input
+                id="startTime"
+                type="datetime-local"
+                value={startTime}
+                onChange={(e) => setStartTime(e.target.value)}
+                className="w-full border border-gray-300 rounded-md shadow-sm p-2 focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+              />
+            </div>
+
+            <div className="flex flex-col gap-1.5">
+              <label
+                className="text-sm font-medium text-gray-700"
+                htmlFor="endTime"
+              >
+                End Time
+              </label>
+              <Input
+                id="endTime"
+                type="datetime-local"
+                value={endTime}
+                onChange={(e) => setEndTime(e.target.value)}
+                className="w-full border border-gray-300 rounded-md shadow-sm p-2 focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+              />
+            </div>
+
+            <div className="flex flex-col gap-1.5">
+              <label
+                className="text-sm font-medium text-gray-700"
+                htmlFor="notes"
+              >
+                Notes
+              </label>
+              <Input
+                id="notes"
+                placeholder="Add shift notes..."
+                value={notes}
+                onChange={(e) => setNotes(e.target.value)}
+                className="w-full border border-gray-300 rounded-md shadow-sm p-2 min-h-[80px] focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+              />
+            </div>
           </div>
-          <div className="flex items-center justify-center gap-2">
-            <label className="w-1/3 text-sm" htmlFor="endTime">
-              End Time
-            </label>
-            <Input
-              id="endTime"
-              type="datetime-local"
-              value={endTime}
-              onChange={(e) => setEndTime(e.target.value)}
-              className="border flex-1 border-gray-300 rounded-sm p-2"
-            />
+
+          <div className="flex justify-end gap-3">
+            <Button size="sm" variant="outlined" onClick={() => setOpen(false)}>
+              Cancel
+            </Button>
+            <Button
+              size="sm"
+              variant="contained"
+              disabled={!isFormValid}
+              onClick={submitNewShift}
+            >
+              Add Shift
+            </Button>
           </div>
-          <div className="flex items-baseline justify-center gap-2">
-            <label className="w-1/3 text-sm" htmlFor="notes">
-              Notes
-            </label>
-            <Input
-              id="notes"
-              placeholder="Notes"
-              value={notes}
-              onChange={(e) => setNotes(e.target.value)}
-              className="border flex-1 border-gray-300 rounded-sm p-2 resize-y"
-            />
-          </div>
-          <Button
-            type="submit"
-            color="submit"
-            disabled={!isFormValid}
-            onClick={submitNewShift}
-          >
-            Add Shift
-          </Button>
         </div>
       </Dialog>
     </>

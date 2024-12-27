@@ -15,42 +15,57 @@ export const HotelInfoCard = () => {
   }
 
   return (
-    <div className="bg-white rounded-sm shadow p-4">
-      <h1 className="text-3xl">{hotel.name}</h1>
-      <div className="flex flex-col">
-        <div>
-          <span className="font-bold">Address:</span> {hotel.address}
-        </div>
-        <div>
-          <span className="font-bold">City:</span> {hotel.city}
-        </div>
-        <div>
-          <span className="font-bold">State:</span> {hotel.state}
-        </div>
-        <div>
-          <span className="font-bold">Country:</span> {hotel.country}
-        </div>
-        <div>
-          <span className="font-bold">Phone:</span> {hotel.phone}
-        </div>
-        <div>
-          <span className="font-bold">Email:</span> {hotel.email}
-        </div>
-        <div>
-          <span className="font-bold">People working in hotel:</span>{" "}
-          {hotel.staffCount}
+    <div className="bg-white rounded-lg shadow-md overflow-hidden">
+      <div className="p-6 border-b border-gray-200">
+        <h1 className="text-2xl font-bold text-gray-900 mb-4">{hotel.name}</h1>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div className="space-y-3">
+            <div className="flex items-start">
+              <span className="text-gray-500 w-20">Address:</span>
+              <span className="text-gray-900 flex-1">{hotel.address}</span>
+            </div>
+            <div className="flex items-start">
+              <span className="text-gray-500 w-20">City:</span>
+              <span className="text-gray-900">{hotel.city}</span>
+            </div>
+            <div className="flex items-start">
+              <span className="text-gray-500 w-20">State:</span>
+              <span className="text-gray-900">{hotel.state}</span>
+            </div>
+            <div className="flex items-start">
+              <span className="text-gray-500 w-20">Country:</span>
+              <span className="text-gray-900">{hotel.country}</span>
+            </div>
+          </div>
+          <div className="space-y-3">
+            <div className="flex items-start">
+              <span className="text-gray-500 w-20">Phone:</span>
+              <span className="text-gray-900">{hotel.phone}</span>
+            </div>
+            <div className="flex items-start">
+              <span className="text-gray-500 w-20">Email:</span>
+              <span className="text-gray-900">{hotel.email}</span>
+            </div>
+            <div className="flex items-start">
+              <span className="text-gray-500 w-20">Staff:</span>
+              <span className="text-gray-900">{hotel.staffCount} people</span>
+            </div>
+          </div>
         </div>
       </div>
-      <h2 className="text-xl my-2">Staff:</h2>
-      <ul className="grid md:grid-cols-2 lg:grid-cols-3 grid-cols-1 gap-2">
-        {hotel.staff.map((staffMember) => (
-          <HotelStaffCard
-            key={staffMember.id}
-            staffMember={staffMember}
-            onStaffMemberClick={onStaffMemberClick}
-          />
-        ))}
-      </ul>
+
+      <div className="p-6">
+        <h2 className="text-xl font-semibold text-gray-900 mb-4">Staff Members</h2>
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
+          {hotel.staff.map((staffMember) => (
+            <HotelStaffCard
+              key={staffMember.id}
+              staffMember={staffMember}
+              onStaffMemberClick={onStaffMemberClick}
+            />
+          ))}
+        </div>
+      </div>
     </div>
   );
 };

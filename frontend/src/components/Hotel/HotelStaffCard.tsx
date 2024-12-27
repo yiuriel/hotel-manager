@@ -11,21 +11,33 @@ export const HotelStaffCard: FC<{
     (state) => state.hotel.selectedStaffMember
   );
 
+  const isSelected = selectedStaffMember === staffMember.id;
+
   return (
-    <li
-      key={staffMember.id}
-      className={`flex flex-col border border-gray-300 rounded-sm cursor-pointer p-2 ${
-        selectedStaffMember === staffMember.id ? "bg-yellow-400" : ""
-      }`}
+    <div
+      className={`
+        relative flex flex-col rounded-lg border transition-all duration-150 cursor-pointer
+        ${
+          isSelected
+            ? "border-yellow-400 bg-yellow-50 shadow-md"
+            : "border-gray-200 hover:border-yellow-400 hover:shadow-sm"
+        }
+      `}
       onClick={() => onStaffMemberClick(staffMember.id)}
     >
-      <div className="flex items-center justify-between">
-        <span className="text-lg font-bold">{staffMember.name}</span>
-        <StaffAddShift staffMember={staffMember} />
+      <div className="p-4 space-y-2">
+        <div className="flex items-center justify-between">
+          <h3 className="text-lg font-semibold text-gray-900">
+            {staffMember.name}
+          </h3>
+          <div>
+            <StaffAddShift staffMember={staffMember} />
+          </div>
+        </div>
+        <div className="text-sm text-gray-600 truncate">
+          {staffMember.email}
+        </div>
       </div>
-      <span className={`px-2 py-1 cursor-pointer truncate`}>
-        {staffMember.email}
-      </span>
-    </li>
+    </div>
   );
 };
