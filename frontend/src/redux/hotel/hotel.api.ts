@@ -47,6 +47,18 @@ export const hotelApi = createApi({
       }),
       invalidatesTags: [HOTELS_TAG],
     }),
+    addHotelStaff: builder.mutation<
+      { message: string; ok: boolean },
+      { organizationId: string; userId: string; hotelId: string }
+    >({
+      query: ({ organizationId, userId, hotelId }) => ({
+        url: `/${organizationId}/hotel/${hotelId}/staff`,
+        method: "POST",
+        body: { id: userId },
+        credentials: "include",
+      }),
+      invalidatesTags: [HOTEL_TAG, HOTELS_TAG],
+    }),
   }),
 });
 
@@ -55,4 +67,5 @@ export const {
   useGetHotelsQuery,
   useLazyGetHotelByIdQuery,
   useAddNewHotelMutation,
+  useAddHotelStaffMutation,
 } = hotelApi;

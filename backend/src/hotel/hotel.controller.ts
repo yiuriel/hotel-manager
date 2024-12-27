@@ -37,4 +37,15 @@ export class HotelController {
   ) {
     return this.hotelService.addNewHotel(organizationId, hotel);
   }
+
+  @Post(':hotelId/staff')
+  @UseGuards(AuthGuard, PermissionsGuard)
+  @Permissions('update:hotel', 'read:hotel')
+  async addHotelStaff(
+    @Param('organizationId') organizationId: string,
+    @Param('hotelId') hotelId: string,
+    @Body() { id: userId }: { id: string },
+  ) {
+    return this.hotelService.addHotelStaff(organizationId, userId, hotelId);
+  }
 }

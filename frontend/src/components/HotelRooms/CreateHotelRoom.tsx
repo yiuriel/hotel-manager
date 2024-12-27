@@ -12,11 +12,13 @@ export const CreateHotelRoom: FC<{
       <Button color="secondary" onClick={() => setOpen(true)}>
         Create new room
       </Button>
-      <CreateRoomDialog
-        open={open}
-        onClose={() => setOpen(false)}
-        hotelId={hotelId}
-      />
+      {open && (
+        <CreateRoomDialog
+          open={open}
+          onClose={() => setOpen(false)}
+          hotelId={hotelId}
+        />
+      )}
     </>
   );
 };

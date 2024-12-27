@@ -2,6 +2,7 @@ import { NestFactory } from '@nestjs/core';
 import * as cookieParser from 'cookie-parser';
 import { AppModule } from './app.module';
 import { SeedService } from './seed/seed.service';
+import helmet from 'helmet';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
@@ -12,10 +13,12 @@ async function bootstrap() {
     optionsSuccessStatus: 204,
     credentials: true,
   });
+  app.use(helmet());
+  app.use(cookieParser());
+
   const seedService = app.get(SeedService);
   await seedService.run();
 
-  app.use(cookieParser());
   await app.listen(3001);
 }
 bootstrap();

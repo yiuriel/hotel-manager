@@ -24,7 +24,7 @@ export class UserController {
 
   @Get()
   @UseGuards(AuthGuard, PermissionsGuard)
-  @Permissions('update:user', 'update:permission')
+  @Permissions('read:user')
   getAllOrgUsers(@Param('organizationId') organizationId: string) {
     return this.userService.getAllOrgUsers(organizationId);
   }

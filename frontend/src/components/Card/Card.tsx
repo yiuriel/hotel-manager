@@ -13,7 +13,7 @@ export const Card = ({
   actions?: [CardAction, CardAction];
 }) => {
   return (
-    <div className="rounded-md shadow-xl min-h-64 max-h-64 flex flex-col justify-between overflow-hidden">
+    <div className="rounded-md shadow-xl min-h-72 max-h-72 flex flex-col justify-between overflow-hidden">
       <div className="bg-white h-full overflow-auto">{children}</div>
       {actions && (
         <div className="flex justify-end">

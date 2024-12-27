@@ -21,11 +21,13 @@ export const HotelRoomsCard = () => {
         <Button size="sm" variant="contained" onClick={() => setOpen(true)}>
           Add Room
         </Button>
-        <CreateRoomDialog
-          open={open}
-          onClose={() => setOpen(false)}
-          hotelId={hotel.id}
-        />
+        {open && (
+          <CreateRoomDialog
+            open={open}
+            onClose={() => setOpen(false)}
+            hotelId={hotel.id}
+          />
+        )}
       </div>
       <div className="divide-y divide-gray-200">
         {hotel.rooms.map((room) => (

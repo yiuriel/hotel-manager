@@ -96,13 +96,12 @@ export const CreateRoomDialog: FC<{
           />
         </Label>
         <Label className="flex items-center gap-2 flex-nowrap">
-          <span>Is available</span>
+          <span className="truncate">Is available</span>
           <Input
             type="checkbox"
             className="h-4 w-auto"
             checked={isAvailable}
             onChange={(e) => setIsAvailable(e.target.checked)}
-            fullWidth
           />
         </Label>
         <div className="flex justify-end gap-4">

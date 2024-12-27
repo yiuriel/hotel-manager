@@ -5,12 +5,16 @@ import { Repository } from 'typeorm';
 import { HotelDto } from './dto/hotel.dto';
 import { Hotel } from './entities/hotel.entity';
 import { CreateHotelDto } from './dto/create-hotel.dto';
+import { User } from 'src/user/entities/user.entity';
 
 @Injectable()
 export class HotelService {
   constructor(
     @InjectRepository(Hotel)
     private readonly hotelRepository: Repository<Hotel>,
+
+    @InjectRepository(User)
+    private readonly userRepository: Repository<User>,
   ) {}
 
   async findHotelsByOrganizationId(organizationId: string) {
@@ -52,6 +56,35 @@ export class HotelService {
         organization: { id: organizationId },
       });
       return { ok: true, message: 'Hotel added successfully' };
+    } catch (error) {
+      throw new HttpException(error.message, 400);
+    }
+  }
+
+  async addHotelStaff(organizationId: string, userId: string, hotelId: string) {
+    try {
+      const hotel = await this.hotelRepository.findOne({
+        where: { id: hotelId, organization: { id: organizationId } },
+        relations: ['staff'],
+      });
+
+      if (!hotel) {
+        return { ok: false, message: 'Hotel not found' };
+      }
+
+      const user = await this.userRepository.findOne({
+        where: { id: userId, organization: { id: organizationId } },
+      });
+
+      if (!user) {
+        return { ok: false, message: 'User not found' };
+      }
+
+      hotel.staff.push(user);
+
+      await this.hotelRepository.save(hotel);
+
+      return { ok: true, message: 'Staff added successfully' };
     } catch (error) {
       throw new HttpException(error.message, 400);
     }
