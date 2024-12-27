@@ -1,14 +1,15 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
-import { User } from "./user.types";
+import { User, UserCreate } from "./user.types";
 
 const USER_TAG = "USER";
+const USERS_TAG = "USERS";
 
 export const userApi = createApi({
   reducerPath: "userApi",
   baseQuery: fetchBaseQuery({
     baseUrl: `${import.meta.env.VITE_API_URL}/organization`,
   }),
-  tagTypes: [USER_TAG],
+  tagTypes: [USER_TAG, USERS_TAG],
   endpoints: (builder) => ({
     getUsers: builder.query<User[], string>({
       query: (organizationId) => ({
@@ -16,8 +17,7 @@ export const userApi = createApi({
         method: "GET",
         credentials: "include",
       }),
-      providesTags: (result) =>
-        result ? result.map(({ id }) => ({ type: USER_TAG, id })) : [],
+      providesTags: [USERS_TAG],
     }),
     updateUser: builder.mutation<
       User,
@@ -29,7 +29,7 @@ export const userApi = createApi({
         credentials: "include",
         body: { ...patch, id },
       }),
-      invalidatesTags: (_, __, { id }) => [{ type: USER_TAG, id }],
+      invalidatesTags: [USERS_TAG],
     }),
     updateUserPermission: builder.mutation<
       User,
@@ -41,7 +41,16 @@ export const userApi = createApi({
         credentials: "include",
         body: { permissions: permissions.permissions },
       }),
-      invalidatesTags: (_, __, { id }) => [{ type: USER_TAG, id }],
+      invalidatesTags: [USERS_TAG],
+    }),
+    addUser: builder.mutation<User, UserCreate & { organizationId: string }>({
+      query: ({ organizationId, ...user }) => ({
+        url: `/${organizationId}/user`,
+        method: "POST",
+        credentials: "include",
+        body: user,
+      }),
+      invalidatesTags: [USERS_TAG],
     }),
   }),
 });
@@ -51,4 +60,5 @@ export const {
   useLazyGetUsersQuery,
   useUpdateUserMutation,
   useUpdateUserPermissionMutation,
+  useAddUserMutation,
 } = userApi;

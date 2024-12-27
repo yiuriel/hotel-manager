@@ -19,10 +19,10 @@ export class UserDto {
   @Expose()
   @Transform(({ obj }) => {
     return {
-      name: obj.role.name,
-      description: obj.role.description,
-      editable: obj.role.editable,
-      permissions: obj.role.permissions.map((permission: PermissionDto) => ({
+      name: obj?.role?.name,
+      description: obj?.role?.description,
+      editable: obj?.role?.editable,
+      permissions: obj?.role?.permissions.map((permission: PermissionDto) => ({
         name: permission.name,
       })),
     };
@@ -47,6 +47,9 @@ export class UserDto {
   @Type(() => ShiftDto)
   @Expose()
   shifts: ShiftDto[];
+
+  @Expose()
+  userIsAssignedToHotel?: boolean;
 
   @Exclude()
   password: string; // Exclude sensitive data

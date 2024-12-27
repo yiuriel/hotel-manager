@@ -20,4 +20,12 @@ export type User = {
     endTime: string;
     notes: string;
   }[];
+  userIsAssignedToHotel?: boolean;
+};
+
+export type UserCreate = {
+  email: string;
+  password: string;
+  name: string;
+  phone: string;
 };

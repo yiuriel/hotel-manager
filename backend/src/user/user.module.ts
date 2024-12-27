@@ -9,6 +9,7 @@ import { User } from './entities/user.entity';
 import { UserController } from './user.controller';
 import { UserService } from './user.service';
 import { Permission } from 'src/permission/entities/permission.entity';
+import { Role } from 'src/role/entities/role.entity';
 
 @Module({
   imports: [
@@ -19,6 +20,7 @@ import { Permission } from 'src/permission/entities/permission.entity';
       Hotel,
       Organization,
       Permission,
+      Role,
     ]),
   ],
   controllers: [UserController],

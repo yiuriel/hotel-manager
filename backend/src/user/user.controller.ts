@@ -18,8 +18,16 @@ export class UserController {
   constructor(private readonly userService: UserService) {}
 
   @Post()
-  create(@Body() createUserDto: CreateUserDto) {
-    return this.userService.create(createUserDto);
+  @UseGuards(AuthGuard, PermissionsGuard)
+  @Permissions('create:user')
+  createOrganizationUser(
+    @Param('organizationId') organizationId: string,
+    @Body() createUserDto: CreateUserDto,
+  ) {
+    return this.userService.createOrganizationUser(
+      organizationId,
+      createUserDto,
+    );
   }
 
   @Get()

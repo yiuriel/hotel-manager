@@ -22,6 +22,8 @@ import { SeedModule } from './seed/seed.module';
 import { UserService } from './user/user.service';
 import { RoleService } from './role/role.service';
 import { PermissionModule } from './permission/permission.module';
+import { CustomThrottlerGuard } from './common/guards/throttler.guard';
+import { ThrottlerModule } from '@nestjs/throttler';
 
 @Module({
   imports: [
@@ -55,8 +57,23 @@ import { PermissionModule } from './permission/permission.module';
     AuthModule,
     SeedModule,
     PermissionModule,
+    ThrottlerModule.forRoot([
+      {
+        ttl: 1000,
+        limit: 60,
+      },
+    ]),
   ],
   controllers: [AppController],
-  providers: [AppService, UserService, RoleService, SeedService],
+  providers: [
+    AppService,
+    UserService,
+    RoleService,
+    SeedService,
+    {
+      provide: 'APP_GUARD',
+      useClass: CustomThrottlerGuard,
+    },
+  ],
 })
 export class AppModule {}

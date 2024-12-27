@@ -58,10 +58,10 @@ export const HotelsDashboardMenuItem: FC<{ hotel: Hotel; index: number }> = ({
         </div>
         <div className="flex items-center text-sm text-gray-600">
           <span className="mr-1">
-            {hotel.staffCount > 0 ? hotel.staffCount : "No"}
+            {hotel.staffCount > 2 ? hotel.staffCount : hotel.staff.length}
           </span>
           <span className="mr-1">Staff</span>
-          {hotel.staffCount > 0 && (
+          {hotel.staffCount > 2 ? null : (
             <span className="text-gray-500">
               {hotel.staff.map((staff) => staff.name).join(", ")}
             </span>
