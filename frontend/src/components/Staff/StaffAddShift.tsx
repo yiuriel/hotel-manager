@@ -3,6 +3,7 @@ import { useAppDispatch, useAppSelector } from "../../redux/hooks";
 import { HOTEL_TAG, hotelApi } from "../../redux/hotel/hotel.api";
 import { HotelStaffWithShifts } from "../../redux/hotel/hotel.types";
 import { useAddShiftMutation } from "../../redux/shift/shift.api";
+import { USER_SHIFT_TAG, userApi } from "../../redux/user/user.api";
 import { Button } from "../Button/Button";
 import { Dialog } from "../Dialog/Dialog";
 import { Input } from "../Input/Input";
@@ -18,12 +19,13 @@ export const StaffAddShift: FC<{
 
   const today = new Date();
   const todayISOString = today.toISOString().slice(0, 16);
-  const oneHourLaterISOString = new Date(today.getTime() + 60 * 60 * 1000)
-    .toISOString()
-    .slice(0, 16);
 
   const [startTime, setStartTime] = useState(todayISOString);
-  const [endTime, setEndTime] = useState(oneHourLaterISOString);
+  const [endTime, setEndTime] = useState(
+    new Date(new Date(startTime).getTime() + 8 * 60 * 60 * 1000)
+      .toISOString()
+      .slice(0, 16)
+  );
   const [notes, setNotes] = useState("");
 
   const isFormValid = !!startTime && !!endTime && !!notes;
@@ -38,12 +40,32 @@ export const StaffAddShift: FC<{
 
         if (response.data?.message) {
           dispatch(hotelApi.util.invalidateTags([HOTEL_TAG]));
+          dispatch(userApi.util.invalidateTags([USER_SHIFT_TAG]));
         }
         setOpen(false);
       } catch (error) {
         console.error(error);
       }
     }
+  };
+
+  const handleStartTimeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const newStartTime = e.target.value;
+    const newEndTime = new Date(
+      new Date(newStartTime).getTime() + 8 * 60 * 60 * 1000
+    )
+      .toISOString()
+      .slice(0, 16);
+    setStartTime(newStartTime);
+    setEndTime(newEndTime);
+  };
+
+  const handleEndTimeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const newEndTime = e.target.value;
+    if (new Date(newEndTime).getTime() < new Date(startTime).getTime()) {
+      return;
+    }
+    setEndTime(newEndTime);
   };
 
   return (
@@ -79,7 +101,7 @@ export const StaffAddShift: FC<{
                 id="startTime"
                 type="datetime-local"
                 value={startTime}
-                onChange={(e) => setStartTime(e.target.value)}
+                onChange={handleStartTimeChange}
                 className="w-full border border-gray-300 rounded-md shadow-sm p-2 focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
               />
             </div>
@@ -95,7 +117,7 @@ export const StaffAddShift: FC<{
                 id="endTime"
                 type="datetime-local"
                 value={endTime}
-                onChange={(e) => setEndTime(e.target.value)}
+                onChange={handleEndTimeChange}
                 className="w-full border border-gray-300 rounded-md shadow-sm p-2 focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
               />
             </div>
@@ -107,9 +129,10 @@ export const StaffAddShift: FC<{
               >
                 Notes
               </label>
-              <Input
+              <textarea
                 id="notes"
                 placeholder="Add shift notes..."
+                autoComplete="off"
                 value={notes}
                 onChange={(e) => setNotes(e.target.value)}
                 className="w-full border border-gray-300 rounded-md shadow-sm p-2 min-h-[80px] focus:ring-2 focus:ring-blue-500 focus:border-blue-500"

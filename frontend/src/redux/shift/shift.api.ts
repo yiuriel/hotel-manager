@@ -8,7 +8,7 @@ export const shiftApi = createApi({
   }),
   endpoints: (builder) => ({
     addShift: builder.mutation<
-      { message: string },
+      { message: string; ok: boolean; shiftCount: number; userId: string },
       { hotelId: string; shift: ShiftRequest }
     >({
       query: ({ hotelId, shift }) => ({

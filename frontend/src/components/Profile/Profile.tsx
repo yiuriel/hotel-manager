@@ -29,7 +29,11 @@ export const Profile: React.FC<ProfileProps> = ({ user }) => {
       <div className="mb-6">
         <h2 className="text-xl font-semibold mb-3">Role</h2>
         <p className="mb-1">{user.role.name}</p>
-        <p className="text-gray-600">{user.role.description}</p>
+        {user.role.description && (
+          <p className="text-gray-600">
+            role description: {user.role.description}
+          </p>
+        )}
       </div>
 
       <div className="mb-6">

@@ -1,9 +1,9 @@
-import { NewHotelForm } from "../components/NewHotelForm/NewHotelForm";
+import { NewHotel } from "../components/NewHotel/NewHotel";
 
 export const AddHotelPage = () => {
   return (
     <div className="p-4">
-      <NewHotelForm />
+      <NewHotel />
     </div>
   );
 };

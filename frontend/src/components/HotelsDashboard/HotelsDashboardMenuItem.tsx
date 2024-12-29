@@ -49,20 +49,22 @@ export const HotelsDashboardMenuItem: FC<{ hotel: Hotel; index: number }> = ({
       }`}
       ref={drop}
     >
-      <div className="flex items-center">
-        <div className="flex-1">
+      <div className="flex items-center gap-2 justify-between">
+        <div>
           <span className="font-medium text-sm">{hotel.name}</span>
           <span className="text-xs text-gray-500 block">
             {hotel.address}, {hotel.city}
           </span>
         </div>
-        <div className="flex items-center text-sm text-gray-600">
+        <div className="flex items-center text-sm text-gray-600 min-w-0">
           <span className="mr-1">
-            {hotel.staffCount > 2 ? hotel.staffCount : hotel.staff.length}
+            {hotel.staffCount > 2
+              ? `${hotel.staffCount - 1}+`
+              : hotel.staff.length}
           </span>
           <span className="mr-1">Staff</span>
           {hotel.staffCount > 2 ? null : (
-            <span className="text-gray-500">
+            <span className="text-gray-500 truncate">
               {hotel.staff.map((staff) => staff.name).join(", ")}
             </span>
           )}

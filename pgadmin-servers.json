@@ -1,0 +1,14 @@
+{
+    "Servers": {
+        "1": {
+            "Name": "hotel_management",
+            "Group": "Servers",
+            "Host": "postgres",
+            "Port": 5432,
+            "MaintenanceDB": "postgres",
+            "Username": "hotel_admin",
+            "Password": "hotel_password",
+            "SSLMode": "prefer"
+        }
+    }
+}

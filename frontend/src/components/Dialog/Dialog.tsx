@@ -6,11 +6,13 @@ export const Dialog = ({
   children,
   onClose,
   open,
+  className = "w-80",
 }: {
   title: string;
   children: React.ReactNode;
   onClose: () => void;
   open: boolean;
+  className?: string;
 }) => {
   if (!open) return null;
 
@@ -18,7 +20,7 @@ export const Dialog = ({
     <>
       <Backdrop onClick={onClose} />
       <div
-        className="fixed inset-0 z-50 flex items-center justify-center mx-auto w-80"
+        className={`fixed inset-0 z-50 flex items-center justify-center mx-auto ${className}`}
         role="dialog"
         aria-modal="true"
         onClick={(e) => {

@@ -8,7 +8,6 @@ import {
   Column,
   CreateDateColumn,
   Entity,
-  JoinColumn,
   JoinTable,
   ManyToMany,
   ManyToOne,
@@ -34,15 +33,15 @@ export class User {
   @Column()
   passwordHash: string;
 
-  @ManyToOne(() => Hotel, (hotel) => hotel.staff)
-  @JoinColumn({ name: 'hotel_id' })
+  @ManyToOne(() => Hotel, (hotel) => hotel.staff, {
+    onDelete: 'CASCADE',
+    nullable: true,
+  })
   hotel: Hotel;
 
   @ManyToMany(() => Shift, (shift) => shift.users)
   @JoinTable({
     name: 'user_shift',
-    joinColumn: { name: 'user_id', referencedColumnName: 'id' },
-    inverseJoinColumn: { name: 'shift_id', referencedColumnName: 'id' },
   })
   shifts: Shift[];
 
@@ -56,7 +55,9 @@ export class User {
   role: Role;
 
   @ManyToMany(() => Permission)
-  @JoinTable()
+  @JoinTable({
+    name: 'user_permission',
+  })
   permissions: Permission[];
 
   @ManyToOne(() => Organization, (organization) => organization.users)

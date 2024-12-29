@@ -9,10 +9,11 @@ import { AuthService } from 'src/auth/auth.service';
 import { UserService } from 'src/user/user.service';
 import { Permission } from 'src/permission/entities/permission.entity';
 import { Role } from 'src/role/entities/role.entity';
+import { Shift } from 'src/shift/entities/shift.entity';
 
 @Module({
   imports: [
-    TypeOrmModule.forFeature([Hotel, Activity, User, Permission, Role]),
+    TypeOrmModule.forFeature([Hotel, Activity, User, Permission, Role, Shift]),
   ],
   controllers: [HotelController],
   providers: [HotelService, AuthService, UserService],

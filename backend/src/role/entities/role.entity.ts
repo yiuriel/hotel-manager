@@ -40,6 +40,8 @@ export class Role {
   organization: Organization;
 
   @ManyToMany(() => Permission, { eager: true })
-  @JoinTable()
+  @JoinTable({
+    name: 'role_permission',
+  })
   permissions: Permission[]; // Permissions assigned to the role
 }

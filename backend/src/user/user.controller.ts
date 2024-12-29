@@ -51,4 +51,13 @@ export class UserController {
       updatedPermissions.permissions,
     );
   }
+
+  @Get(':userId/shift')
+  @UseGuards(AuthGuard)
+  getUserShifts(
+    @Param('organizationId') organizationId: string,
+    @Param('userId') userId: string,
+  ) {
+    return this.userService.getAllUserShifts(userId, organizationId);
+  }
 }

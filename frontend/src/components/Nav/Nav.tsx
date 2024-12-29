@@ -1,6 +1,6 @@
 import { Link } from "react-router";
 import { useAppSelector } from "../../redux/hooks";
-import { UserMenu } from "./UserMenu";
+import { UserMenu } from "./UserMenu/UserMenu";
 import { HomeIcon } from "../Icons/HomeIcon";
 import { HoverableIcon } from "../Icons/HoverableIcon";
 

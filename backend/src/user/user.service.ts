@@ -3,11 +3,12 @@ import { InjectRepository } from '@nestjs/typeorm';
 import * as argon2 from 'argon2';
 import { plainToInstance } from 'class-transformer';
 import { Permission } from 'src/permission/entities/permission.entity';
-import { In, Repository } from 'typeorm';
+import { In, MoreThan, Repository } from 'typeorm';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UserDto } from './dto/user.dto';
 import { User } from './entities/user.entity';
 import { Role } from 'src/role/entities/role.entity';
+import { Shift } from 'src/shift/entities/shift.entity';
 
 @Injectable()
 export class UserService {
@@ -20,6 +21,9 @@ export class UserService {
 
     @InjectRepository(Role)
     private readonly roleRepository: Repository<Role>,
+
+    @InjectRepository(Shift)
+    private readonly shiftRepository: Repository<Shift>,
   ) {}
 
   async createOrganizationUser(
@@ -50,7 +54,7 @@ export class UserService {
     });
   }
 
-  getAllOrgUsers(organizationId: string) {
+  async getAllOrgUsers(organizationId: string) {
     return plainToInstance(
       UserDto,
       this.userRepository.find({
@@ -118,5 +122,19 @@ export class UserService {
 
   async clearAll() {
     return this.userRepository.remove(await this.userRepository.find());
+  }
+
+  async getAllUserShifts(userId: string, organizationId: string) {
+    return this.shiftRepository.find({
+      where: {
+        users: {
+          id: userId,
+          organization: {
+            id: organizationId,
+          },
+        },
+        startTime: MoreThan(new Date()),
+      },
+    });
   }
 }

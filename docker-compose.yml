@@ -15,19 +15,24 @@ services:
     networks:
       - default
 
-  # pgadmin:
-  #   image: dpage/pgadmin4
-  #   restart: always
-  #   container_name: pgadmin
-  #   environment:
-  #     - PGADMIN_DEFAULT_EMAIL=admin@admin.com
-  #     - PGADMIN_DEFAULT_PASSWORD=admin
-  #   ports:
-  #     - '5050:80'
-  #   networks:
-  #     - default
-  #   depends_on:
-  #     - postgres
+  pgadmin:
+    image: dpage/pgadmin4:latest
+    container_name: pgadmin
+    restart: unless-stopped
+    environment:
+      - PGADMIN_DEFAULT_EMAIL=${PGADMIN_DEFAULT_EMAIL:-admin@admin.com}
+      - PGADMIN_DEFAULT_PASSWORD=${PGADMIN_DEFAULT_PASSWORD:-admin}
+      - PGADMIN_CONFIG_SERVER_MODE=False
+      - PGADMIN_SERVER_JSON_FILE=/pgadmin4/servers.json
+    volumes:
+      - pgadmin_data:/var/lib/pgadmin
+      - ./pgadmin-servers.json:/pgadmin4/servers.json
+    ports:
+      - "5050:80"
+    networks:
+      - default
+    depends_on:
+      - postgres
 
   backend:
     build:
@@ -84,6 +89,8 @@ services:
 
 volumes:
   postgres_data:
+    driver: local
+  pgadmin_data:
     driver: local
 
 networks:

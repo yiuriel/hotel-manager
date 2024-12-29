@@ -1,11 +1,11 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router";
-import { useLogoutMutation } from "../../redux/auth/auth.api";
-import { HoverableIcon } from "../Icons/HoverableIcon";
-import { ProfileIcon } from "../Icons/ProfileIcon";
-import { Menu } from "../Menu/Menu";
-import { MenuItem } from "../Menu/MenuItem";
-import { PermissionsButton } from "./PermissionsButton";
+import { useLogoutMutation } from "../../../redux/auth/auth.api";
+import { Menu } from "../../Menu/Menu";
+import { MenuItem } from "../../Menu/MenuItem";
+import { PermissionsButton } from "../PermissionsButton";
+import { ProfileNavItem } from "./ProfileNavItem";
+import { ShiftsNavItem } from "./ShiftsNavItem";
 
 export const UserMenu = () => {
   const [logout] = useLogoutMutation();
@@ -15,19 +15,9 @@ export const UserMenu = () => {
 
   return (
     <>
+      <ShiftsNavItem />
       <PermissionsButton />
-      <div
-        className="cursor-pointer"
-        onClick={(e) => {
-          e.stopPropagation();
-
-          setAnchorEl(e.currentTarget);
-        }}
-      >
-        <HoverableIcon>
-          <ProfileIcon />
-        </HoverableIcon>
-      </div>
+      <ProfileNavItem onClick={(e) => setAnchorEl(e.currentTarget)} />
       {anchorEl && (
         <Menu anchorEl={anchorEl} onClose={() => setAnchorEl(null)}>
           <Link prefetch="viewport" to="/app/profile">

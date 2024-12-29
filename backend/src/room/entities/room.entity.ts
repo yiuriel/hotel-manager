@@ -45,7 +45,9 @@ export class Room {
   createdAt: Date; // Timestamp of when the room was added
 
   @ManyToMany(() => Amenity, (amenity) => amenity.rooms)
-  @JoinTable()
+  @JoinTable({
+    name: 'room_amenity',
+  })
   amenities: Amenity[]; // List of amenities for the room
 
   @OneToMany(() => MaintenanceRequest, (request) => request.room)
