@@ -30,13 +30,9 @@ export class AuthService {
   async login(loginData: any, @Res({ passthrough: true }) response: Response) {
     const user = await this.validateUser(loginData.email, loginData.password);
 
-    console.log('validating user', { user });
-
     if (!user) {
       return false;
     }
-
-    console.log({ user });
 
     const payload = { email: user.email, id: user.id };
     const access_token = this.jwtService.sign(payload, {

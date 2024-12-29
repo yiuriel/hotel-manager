@@ -6,12 +6,10 @@ import { faker } from "@faker-js/faker";
 import { PasswordInput } from "../PasswordInput/PasswordInput";
 import { useCreateOrganizationMutation } from "../../redux/organization/organization.api";
 import { useNavigate } from "react-router";
-import { useLoginMutation } from "../../redux/auth/auth.api";
 
 export const RegisterForm = () => {
   const navigate = useNavigate();
   const [createOrganization] = useCreateOrganizationMutation();
-  const [login] = useLoginMutation();
 
   const [userData, setUserData] = useState({
     email: faker.internet.email(),
@@ -48,14 +46,7 @@ export const RegisterForm = () => {
       });
 
       if (response.data?.id) {
-        const loginResponse = await login({
-          email: userData.email,
-          password: userData.password,
-        });
-
-        if (loginResponse.data?.message) {
-          navigate("/app");
-        }
+        navigate("/app");
       }
     } catch (error) {
       console.log(error);

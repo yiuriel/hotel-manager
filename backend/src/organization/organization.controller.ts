@@ -4,12 +4,14 @@ import {
   Get,
   Post,
   Request,
+  Res,
   UseGuards,
 } from '@nestjs/common';
 import { AuthGuard } from 'src/auth/auth.guard';
+import { OrganizationService } from './organization.service';
 import { CreateUserDto } from 'src/user/dto/create-user.dto';
 import { CreateOrganizationDto } from './dto/create-organization.dto';
-import { OrganizationService } from './organization.service';
+import { Response } from 'express';
 
 @Controller('organization')
 export class OrganizationController {
@@ -28,10 +30,16 @@ export class OrganizationController {
       user: CreateUserDto;
       organization: CreateOrganizationDto;
     },
+    @Res() res: Response,
   ) {
-    return this.organizationService.createOrganization(
+    const organization = await this.organizationService.createOrganization(
       body.user,
       body.organization,
+      res,
     );
+
+    console.log('controller organization', organization);
+
+    return res.json(organization);
   }
 }
