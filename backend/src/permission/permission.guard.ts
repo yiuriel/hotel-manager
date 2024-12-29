@@ -41,8 +41,6 @@ export class PermissionsGuard implements CanActivate {
       throw new ForbiddenException('User not found');
     }
 
-    console.log('User permissions:', dbUser.role);
-
     const hasPermission = requiredPermissions.every((permission) => {
       const userPermissions = [...dbUser.role.permissions.map((perm) => perm)];
 

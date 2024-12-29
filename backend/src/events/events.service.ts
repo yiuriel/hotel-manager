@@ -16,7 +16,6 @@ export class EventsService {
 
   emitShifts(data: any) {
     try {
-      console.log('Emitting shift event:', data);
       this.shiftsSubject.next(data);
       return data;
     } catch (error) {
