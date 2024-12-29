@@ -1,14 +1,12 @@
+import { faker } from "@faker-js/faker";
 import { FC, useState } from "react";
+import { useAppSelector } from "../../redux/hooks";
 import { useAddUserMutation } from "../../redux/user/user.api";
 import { Button } from "../Button/Button";
+import { Dialog } from "../Dialog/Dialog";
 import { Input } from "../Input/Input";
 import { Label } from "../Label/Label";
-import { useAppSelector } from "../../redux/hooks";
-import { Dialog } from "../Dialog/Dialog";
-import { HoverableIcon } from "../Icons/HoverableIcon";
-import { EyeOffIcon } from "../Icons/EyeOffIcon";
-import { EyeIcon } from "../Icons/EyeIcon";
-import { faker } from "@faker-js/faker";
+import { PasswordInput } from "../PasswordInput/PasswordInput";
 
 export const AddUserForm: FC<{ onClose: () => void }> = ({ onClose }) => {
   const organizationId = useAppSelector((state) => state.organization.id);
@@ -19,7 +17,6 @@ export const AddUserForm: FC<{ onClose: () => void }> = ({ onClose }) => {
       length: 10,
     })
   );
-  const [showPassword, setShowPassword] = useState(true);
   const [phone, setPhone] = useState(faker.phone.number());
   const [addUser, { isLoading }] = useAddUserMutation();
 
@@ -65,23 +62,11 @@ export const AddUserForm: FC<{ onClose: () => void }> = ({ onClose }) => {
             className="w-full"
           />
         </div>
-        <div className="flex flex-col gap-1 relative">
-          <Label htmlFor="password">Password</Label>
-          <Input
-            type={showPassword ? "text" : "password"}
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            required
-            id="password"
-            className="w-full pr-10"
-          />
-          <HoverableIcon
-            className="absolute right-2 bottom-[-6px] transform -translate-y-1/2 w-5 h-5"
-            onClick={() => setShowPassword(!showPassword)}
-          >
-            {showPassword ? <EyeOffIcon /> : <EyeIcon />}
-          </HoverableIcon>
-        </div>
+        <PasswordInput
+          password={password}
+          setPassword={setPassword}
+          containerClassName="flex flex-col gap-1"
+        />
         <div className="flex flex-col gap-1">
           <Label htmlFor="phone">Phone</Label>
           <Input

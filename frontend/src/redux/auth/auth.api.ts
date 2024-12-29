@@ -10,7 +10,10 @@ export const authApi = createApi({
   }),
   tagTypes: [VERIFY_TAG],
   endpoints: (builder) => ({
-    login: builder.mutation({
+    login: builder.mutation<
+      { message: string },
+      { email: string; password: string }
+    >({
       query: (credentials) => ({
         url: "login",
         method: "POST",

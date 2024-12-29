@@ -1,4 +1,4 @@
-import { useNavigate } from "react-router";
+import { Link, useNavigate } from "react-router";
 import { LoginForm } from "../components/LoginForm/LoginForm";
 import { useVerifyQuery } from "../redux/auth/auth.api";
 import { Loading } from "../components/Loading/Loading";
@@ -25,12 +25,16 @@ export const LoginPage = () => {
           <h2 className="mt-6 text-3xl font-bold text-gray-900">
             Welcome back
           </h2>
-          <p className="mt-2 text-sm text-gray-600">
-            Sign in to your account
-          </p>
+          <p className="mt-2 text-sm text-gray-600">Sign in to your account</p>
         </div>
         <div className="mt-8 bg-white py-8 px-4 shadow-lg rounded-lg sm:px-10">
           <LoginForm />
+          <p className="mt-4 text-center text-sm text-gray-600">
+            Don't have an account?{" "}
+            <Link to="/register" className="text-blue-600 hover:underline">
+              Register
+            </Link>
+          </p>
         </div>
       </div>
     </div>

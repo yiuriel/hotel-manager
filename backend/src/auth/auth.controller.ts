@@ -38,9 +38,7 @@ export class AuthController {
 
   @Post('verify')
   async verifyToken(@Request() req: any) {
-    const token = req.headers.cookie?.split(';')?.[0]?.split('=')?.[1];
-
-    return this.authService.verifyToken(token);
+    return this.authService.verifyToken(req);
   }
 
   @Post('register')
