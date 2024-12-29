@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { forwardRef, Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { ThrottlerModule } from '@nestjs/throttler';
 import { TypeOrmModule } from '@nestjs/typeorm';
@@ -18,13 +18,10 @@ import { PaymentModule } from './payment/payment.module';
 import { PermissionModule } from './permission/permission.module';
 import { ReservationModule } from './reservation/reservation.module';
 import { RoleModule } from './role/role.module';
-import { RoleService } from './role/role.service';
 import { RoomModule } from './room/room.module';
 import { SeedModule } from './seed/seed.module';
-import { SeedService } from './seed/seed.service';
 import { ShiftModule } from './shift/shift.module';
 import { UserModule } from './user/user.module';
-import { UserService } from './user/user.service';
 
 @Module({
   imports: [
@@ -52,8 +49,8 @@ import { UserService } from './user/user.service';
     GuestModule,
     PaymentModule,
     GuestReviewModule,
-    OrganizationModule,
-    UserModule,
+    forwardRef(() => OrganizationModule),
+    forwardRef(() => UserModule),
     RoleModule,
     AuthModule,
     SeedModule,
@@ -69,9 +66,6 @@ import { UserService } from './user/user.service';
   controllers: [AppController],
   providers: [
     AppService,
-    UserService,
-    RoleService,
-    SeedService,
     {
       provide: 'APP_GUARD',
       useClass: CustomThrottlerGuard,

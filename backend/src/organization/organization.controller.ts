@@ -38,8 +38,6 @@ export class OrganizationController {
       res,
     );
 
-    console.log('controller organization', organization);
-
     return res.json(organization);
   }
 }

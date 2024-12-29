@@ -86,25 +86,6 @@ export const PermissionsCard = () => {
               </select>
             )}
           </div>
-
-          {/* <div className="flex items-center gap-2">
-            <label className="font-medium text-gray-700" htmlFor="role">
-              Role:
-            </label>
-            <select
-              id="role"
-              name="role"
-              value={selectedUser?.role.name || ""}
-              className="border rounded-md p-1.5 pr-8 bg-white min-w-[12rem]"
-              onChange={(e) => handleRoleChange(e.target.value)}
-              disabled={!isAdmin}
-              title={!isAdmin ? "Only administrators can change roles" : ""}
-            >
-              <option value="user">User</option>
-              <option value="admin">Admin</option>
-              <option value="manager">Manager</option>
-            </select>
-          </div> */}
         </div>
 
         {selectedUser && (

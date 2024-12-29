@@ -22,7 +22,7 @@ export class Role {
   /**
    * The name of the role (e.g., Admin, Manager, Staff).
    */
-  @Column({ unique: true })
+  @Column()
   name: string;
 
   @Column({ nullable: true })

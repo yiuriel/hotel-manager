@@ -9,16 +9,15 @@ import { Hotel } from 'src/hotel/entities/hotel.entity';
 import { Shift } from 'src/shift/entities/shift.entity';
 import { Room } from 'src/room/entities/room.entity';
 import { Permission } from 'src/permission/entities/permission.entity';
-import { PERMISSIONS } from 'src/permission/permission.constants';
 
-const userUUID = '5bb911b0-8396-4456-b55b-f931963ee3f0';
-const userMemberUUID = '5bb911b0-8396-4456-b55b-f931963ee3f7';
-const orgUUID = '5bb911b0-8396-4456-b55b-f931963ee3f1';
-const roleUUID = '5bb911b0-8396-4456-b55b-f931963ee3f2';
-const roleMemberUUID = '5bb911b0-8396-4456-b55b-f931963ee3f6';
-const hotelUUID = '5bb911b0-8396-4456-b55b-f931963ee3f3';
-const shiftUUID1 = '5bb911b0-8396-4456-b55b-f931963ee3f4';
-const shiftUUID2 = '5bb911b0-8396-4456-b55b-f931963ee3f5';
+export const userUUID = '5bb911b0-8396-4456-b55b-f931963ee3f0';
+export const userMemberUUID = '5bb911b0-8396-4456-b55b-f931963ee3f7';
+export const orgUUID = '5bb911b0-8396-4456-b55b-f931963ee3f1';
+export const roleUUID = '5bb911b0-8396-4456-b55b-f931963ee3f2';
+export const roleMemberUUID = '5bb911b0-8396-4456-b55b-f931963ee3f6';
+export const hotelUUID = '5bb911b0-8396-4456-b55b-f931963ee3f3';
+export const shiftUUID1 = '5bb911b0-8396-4456-b55b-f931963ee3f4';
+export const shiftUUID2 = '5bb911b0-8396-4456-b55b-f931963ee3f5';
 
 @Injectable()
 export class SeedService {
@@ -50,40 +49,27 @@ export class SeedService {
 
     await this.userRepository.delete({});
     await this.organizationRepository.delete({});
-    await this.permissionRepository.delete({});
-    await this.roleRepository.delete({});
     await this.hotelRepository.delete({});
     await this.shiftRepository.delete({});
     await this.roomRepository.delete({});
 
     console.log('Seeding database...');
 
-    // Seed permissions
-    const dbPermissions: Permission[] = [];
-    for (const permission of Object.values(PERMISSIONS)) {
-      dbPermissions.push(
-        this.permissionRepository.create({
-          name: permission,
-        }),
-      );
+    const role = await this.roleRepository.findOne({
+      where: { name: 'owner' },
+    });
+
+    const adminRole = await this.roleRepository.findOne({
+      where: { name: 'admin' },
+    });
+
+    const memberRole = await this.roleRepository.findOne({
+      where: { name: 'member' },
+    });
+
+    if (!role || !adminRole || !memberRole) {
+      throw new Error('Roles not found');
     }
-
-    await this.permissionRepository.save(dbPermissions);
-
-    const role = this.roleRepository.create({
-      id: roleUUID,
-      name: 'admin',
-      editable: false,
-      permissions: dbPermissions,
-    });
-
-    const memberRole = this.roleRepository.create({
-      id: roleMemberUUID,
-      name: 'member',
-      description: 'Member role',
-      editable: true,
-      permissions: dbPermissions.filter((p) => p.name.includes('read')),
-    });
 
     const hotel = this.hotelRepository.create({
       id: hotelUUID,
@@ -111,7 +97,7 @@ export class SeedService {
       name: 'Example Organization',
     });
 
-    organization.roles = [role, memberRole];
+    organization.roles = [role, adminRole, memberRole];
     organization.hotels = [hotel, hotel2];
 
     await this.hotelRepository.save([hotel, hotel2]);
@@ -126,13 +112,21 @@ export class SeedService {
       role: role,
     });
 
+    const createHotelPermission = await this.permissionRepository.findOne({
+      where: { name: 'create:hotel' },
+    });
+
+    if (!createHotelPermission) {
+      throw new Error('Permission not found');
+    }
+
     const user2 = this.userRepository.create({
       id: userMemberUUID,
       email: 'member@example.com',
       name: 'Jane Doe',
       passwordHash: await argon2.hash('password'),
       role: memberRole,
-      permissions: [dbPermissions.find((p) => p.name === 'create:hotel')!],
+      permissions: [createHotelPermission],
     });
 
     organization.owner = user1;

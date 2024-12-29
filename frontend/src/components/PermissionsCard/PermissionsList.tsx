@@ -18,7 +18,7 @@ type PermissionGroup = {
 const groupPermissions = (permissions: Permission[]): PermissionGroup[] => {
   const groups = permissions.reduce((acc, permission) => {
     // Extract group from permission name (e.g., "user.create" -> "user")
-    const group = permission.name.split('.')[0];
+    const group = permission.name.split(".")[0];
     if (!acc[group]) {
       acc[group] = [];
     }
@@ -28,27 +28,28 @@ const groupPermissions = (permissions: Permission[]): PermissionGroup[] => {
 
   return Object.entries(groups).map(([name, permissions]) => ({
     name: name.charAt(0).toUpperCase() + name.slice(1),
-    permissions: permissions.sort((a, b) => a.label.localeCompare(b.label))
+    permissions: permissions.sort((a, b) => a.label.localeCompare(b.label)),
   }));
 };
 
 export const PermissionsList: FC<PermissionsListProps> = ({
   selectedUser,
-  searchTerm
+  searchTerm,
 }) => {
   const {
     data: permissions,
     isLoading,
     isUninitialized,
-    error
+    error,
   } = useGetPermissionsQuery(undefined);
 
   const filteredAndGroupedPermissions = useMemo(() => {
     if (!permissions) return [];
 
-    const filtered = permissions.filter(permission => 
-      permission.label.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      permission.description.toLowerCase().includes(searchTerm.toLowerCase())
+    const filtered = permissions.filter(
+      (permission) =>
+        permission.label.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        permission.description.toLowerCase().includes(searchTerm.toLowerCase())
     );
 
     return groupPermissions(filtered);
@@ -72,9 +73,7 @@ export const PermissionsList: FC<PermissionsListProps> = ({
 
   if (!permissions || permissions.length === 0) {
     return (
-      <div className="text-gray-500 p-4 text-center">
-        No permissions found.
-      </div>
+      <div className="text-gray-500 p-4 text-center">No permissions found.</div>
     );
   }
 
@@ -87,11 +86,13 @@ export const PermissionsList: FC<PermissionsListProps> = ({
   }
 
   return (
-    <div className="space-y-6 mt-6">
+    <div className="mt-6 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
       {filteredAndGroupedPermissions.map((group) => (
         <div key={group.name} className="bg-gray-50 p-4 rounded-lg">
-          <h3 className="text-lg font-semibold text-gray-700 mb-4">{group.name}</h3>
-          <ul className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+          <h3 className="text-lg font-semibold text-gray-700 mb-4">
+            {group.name}
+          </h3>
+          <ul className="grid grid-cols-1 gap-4">
             {group.permissions.map((permission) => (
               <PermissionListItem
                 key={permission.name}

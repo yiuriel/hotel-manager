@@ -1,15 +1,15 @@
-import { Module } from '@nestjs/common';
+import { forwardRef, Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { AuthService } from 'src/auth/auth.service';
 import { Hotel } from 'src/hotel/entities/hotel.entity';
 import { MaintenanceRequest } from 'src/maintenance_request/entities/maintenance_request.entity';
 import { Organization } from 'src/organization/entities/organization.entity';
+import { Permission } from 'src/permission/entities/permission.entity';
+import { Role } from 'src/role/entities/role.entity';
 import { Shift } from 'src/shift/entities/shift.entity';
 import { User } from './entities/user.entity';
 import { UserController } from './user.controller';
 import { UserService } from './user.service';
-import { Permission } from 'src/permission/entities/permission.entity';
-import { Role } from 'src/role/entities/role.entity';
+import { AuthModule } from 'src/auth/auth.module';
 
 @Module({
   imports: [
@@ -22,9 +22,10 @@ import { Role } from 'src/role/entities/role.entity';
       Permission,
       Role,
     ]),
+    forwardRef(() => AuthModule),
   ],
   controllers: [UserController],
-  providers: [UserService, AuthService],
-  exports: [TypeOrmModule],
+  providers: [UserService],
+  exports: [UserService, TypeOrmModule],
 })
 export class UserModule {}

@@ -3,8 +3,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import * as argon2 from 'argon2';
 import { Response } from 'express';
 import { AuthService } from 'src/auth/auth.service';
-import { Permission } from 'src/permission/entities/permission.entity';
-import { Role } from 'src/role/entities/role.entity';
+import { BaseRoleService } from 'src/role/util/base.role.service';
 import { CreateUserDto } from 'src/user/dto/create-user.dto';
 import { User } from 'src/user/entities/user.entity';
 import { DataSource, Repository } from 'typeorm';
@@ -20,6 +19,8 @@ export class OrganizationService {
     private readonly dataSource: DataSource,
 
     private readonly authService: AuthService,
+
+    private readonly baseRoleService: BaseRoleService,
   ) {}
 
   getUserOrganization(userId: string) {
@@ -60,43 +61,31 @@ export class OrganizationService {
         ...organizationData,
       });
 
+      const roles = await this.baseRoleService.createBaseRoles();
+
+      await queryRunner.manager.save(roles);
+
       const { password, ...userWithoutPassword } = user;
       const passwordHash = await argon2.hash(password);
 
       const newUser = queryRunner.manager.create(User, {
         ...userWithoutPassword,
-        organization: { id: organization.id },
         passwordHash: passwordHash,
+        roleId: roles[0].id,
+        organization: {
+          id: organization.id,
+        },
       });
 
-      const permissions = await queryRunner.manager
-        .getRepository(Permission)
-        .find();
-
-      let role = await queryRunner.manager.getRepository(Role).findOne({
-        where: { name: 'admin' },
-      });
-
-      if (!role) {
-        role = queryRunner.manager.create(Role, {
-          name: 'admin',
-          editable: false,
-          organization: { id: organization.id },
-          permissions: permissions,
-        });
-
-        await queryRunner.manager.save(role);
-      }
-
-      newUser.role = role;
+      newUser.role = roles[0];
 
       organization.users = [newUser];
       organization.owner = newUser;
-      organization.roles = [role];
+      organization.roles = roles;
 
       await queryRunner.manager.save(newUser);
+      // await queryRunner.manager.save(roles);
       await queryRunner.manager.save(organization);
-      await queryRunner.manager.save(role);
 
       await queryRunner.commitTransaction();
 
