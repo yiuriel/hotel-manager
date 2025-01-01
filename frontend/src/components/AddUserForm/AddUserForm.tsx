@@ -8,7 +8,10 @@ import { Input } from "../Input/Input";
 import { Label } from "../Label/Label";
 import { PasswordInput } from "../PasswordInput/PasswordInput";
 
-export const AddUserForm: FC<{ onClose: () => void }> = ({ onClose }) => {
+export const AddUserForm: FC<{
+  onClose: () => void;
+  onSuccess?: (userId: string) => void;
+}> = ({ onClose, onSuccess }) => {
   const organizationId = useAppSelector((state) => state.organization.id);
   const [name, setName] = useState(faker.person.fullName());
   const [email, setEmail] = useState(faker.internet.email());
@@ -27,13 +30,17 @@ export const AddUserForm: FC<{ onClose: () => void }> = ({ onClose }) => {
       return;
     }
 
-    await addUser({
+    const userResponse = await addUser({
       organizationId,
       name,
       email,
       password,
       phone,
     });
+
+    if (onSuccess && "data" in userResponse && userResponse.data?.id) {
+      onSuccess(userResponse.data.id);
+    }
     onClose();
   };
 

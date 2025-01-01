@@ -13,7 +13,7 @@ export const CalendarMonthView: FC<{
         {["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"].map((day) => (
           <div
             key={day}
-            className="text-center py-2 text-sm font-semibold text-gray-600"
+            className="text-center py-1 w-12 text-sm font-semibold text-gray-600"
           >
             {day}
           </div>
@@ -26,7 +26,8 @@ export const CalendarMonthView: FC<{
             date.getMonth(),
             i - (new Date(date.getFullYear(), date.getMonth()).getDay() - 1)
           );
-          const isToday = dateNumber.toDateString() === new Date().toDateString();
+          const isToday =
+            dateNumber.toDateString() === new Date().toDateString();
           const hasShift =
             shifts.some(shiftIsWithinDay(dateNumber)) ||
             isShiftDay(dateNumber, shifts);
@@ -36,7 +37,7 @@ export const CalendarMonthView: FC<{
             <div
               key={i}
               className={`
-                relative aspect-square flex items-center justify-center
+                relative h-12 w-12 flex items-center justify-center
                 text-sm font-medium rounded-md transition-all duration-150
                 ${isToday ? "bg-yellow-100" : ""}
                 ${hasShift ? "bg-green-100" : ""}
@@ -51,9 +52,15 @@ export const CalendarMonthView: FC<{
               `}
               onClick={() => onDayClick(dateNumber)}
             >
-              <span className={`
-                ${isToday ? "w-7 h-7 flex items-center justify-center rounded-full bg-yellow-400 text-yellow-900" : ""}
-              `}>
+              <span
+                className={`
+                ${
+                  isToday
+                    ? "w-6 h-6 flex items-center justify-center rounded-full bg-yellow-400 text-yellow-900"
+                    : ""
+                }
+              `}
+              >
                 {dateNumber.getDate()}
               </span>
               {hasShift && (
